@@ -4,6 +4,14 @@ var router  = express.Router();
 const check            = require('express-validator/check').check;
 const validationResult = require('express-validator/check').validationResult;
 
+var mysql = require('mysql');
+var connection = mysql.createConnection({
+    host : 'localhost',
+    user : 'will',
+    password : 'testing',
+    database : 'cs4400'
+});
+
 /* GET login page. */
 router.get('/', function(req, res, next) {
     res.render('login', {});
@@ -23,7 +31,7 @@ router.post('/', [
         .trim(),
 ], (req, res) => {
     const errors = validationResult(req);
-
+    console.log('before');
     // Checks for the existance of errors
     if(!errors.isEmpty())
     {
@@ -35,6 +43,21 @@ router.post('/', [
     else
     {
         // Make a db connection, check for valid password
+        connection.query({
+            sql     : "SELECT Id FROM User WHERE Email like ? AND Password like ?",
+            timeout : 30000, // 30s
+            values  : [req.body.email, req.body.password]
+        }, function (error, results, fields) {
+            console.log('here');
+            if(results == null || results == [])
+            {
+                console.log('empty');
+            }
+            else
+            {
+                console.log('Here');
+            }
+        });
     }
 });
 
