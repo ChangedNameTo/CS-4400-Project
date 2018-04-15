@@ -1,0 +1,57 @@
+extends layout
+
+block content
+    div(
+        class = "ui container segment"
+    )
+        h1(
+            class = "ui center aligned header"
+        ) Login
+
+        form(
+            class  = 'ui form error',
+            action = '/login',
+            method = 'post'
+        )
+            if errors
+                div(
+                    id = 'error_explanation'
+                )
+                    h2(
+                        class = 'ui center aligned header'
+                    )| These errors prevented this login:
+                    ul
+                        each error in errors
+                            li() #{error.msg}
+            div(
+                class = 'fields'
+            )
+                div(
+                    class = 'required eight wide field'
+                )
+                    label(
+                        for = 'email'
+                    )| Email:
+                    input(
+                        type = 'text',
+                        name = 'email',
+                        id   = 'email'
+                    )
+                div(
+                    class = 'required eight wide field'
+                )
+                    label(
+                        for = 'password'
+                    )| Password:
+                    input(
+                        type = 'text',
+                        name = 'password',
+                        id   = 'password'
+                    )
+            input(
+                type              = 'submit',
+                name              = 'commit',
+                value             = 'Submit',
+                class             = 'ui primary fluid button',
+                data-disable-with = 'Submit'
+            )
