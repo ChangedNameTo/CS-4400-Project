@@ -31,10 +31,10 @@ router.post('/', [
         .trim(),
 ], (req, res) => {
     const errors = validationResult(req);
-    console.log('before');
     // Checks for the existance of errors
     if(!errors.isEmpty())
     {
+        console.log(errors.mapped());
         res.render('login', {
             data   : req.body,
             errors : errors.mapped()
@@ -48,10 +48,19 @@ router.post('/', [
             timeout : 30000, // 30s
             values  : [req.body.email, req.body.password]
         }, function (error, results, fields) {
-            console.log('here');
             if(results == null || results == [])
             {
-                console.log('empty');
+                // We need a custom error for failing validation
+                var custom_error = {
+                    param : 'email',
+                    msg   : 'This email/password combination does not exist!',
+                    value : ''
+                }
+
+                res.render('login', {
+                    data   : req.body,
+                    errors : [custom_error]
+                });
             }
             else
             {

@@ -15,10 +15,11 @@ block content
         )
             if errors
                 div(
-                    id = 'error_explanation'
+                    id    = 'error_explanation',
+                    class = "ui error message"
                 )
-                    h2(
-                        class = 'ui center aligned header'
+                    h3(
+                        class = 'ui left aligned header'
                     )| These errors prevented this login:
                     ul
                         each error in errors
@@ -44,7 +45,7 @@ block content
                         for = 'password'
                     )| Password:
                     input(
-                        type = 'text',
+                        type = 'password',
                         name = 'password',
                         id   = 'password'
                     )
