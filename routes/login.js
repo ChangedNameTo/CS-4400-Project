@@ -4,10 +4,10 @@ var router  = express.Router();
 const check            = require('express-validator/check').check;
 const validationResult = require('express-validator/check').validationResult;
 
-var mysql = require('mysql');
+var mysql      = require('mysql');
 var connection = mysql.createConnection({
-    host : 'localhost',
-    user : 'will',
+    host     : 'localhost',
+    user     : 'will',
     password : 'testing',
     database : 'cs4400'
 });
@@ -30,11 +30,10 @@ router.post('/', [
         .withMessage('Password is required.')
         .trim(),
 ], (req, res) => {
-    const errors = validationResult(req);
     // Checks for the existance of errors
+    const errors = validationResult(req);
     if(!errors.isEmpty())
     {
-        console.log(errors.mapped());
         res.render('login', {
             data   : req.body,
             errors : errors.mapped()
@@ -44,12 +43,14 @@ router.post('/', [
     {
         // Make a db connection, check for valid password
         connection.query({
-            sql     : "SELECT Id FROM User WHERE Email like ? AND Password like ?",
-            timeout : 30000, // 30s
-            values  : [req.body.email, req.body.password]
+            sql     : "SELECT Id FROM User WHERE Email like ? AND Password like ( SELECT MD5(?) );", timeout : 30000, // 30s values  : [req.body.email, req.body.password]
         }, function (error, results, fields) {
             if(results == null || results == [])
             {
+                console.log('req.session', req.session)
+                req.session.valid_login = false;
+                console.log('req.session', req.session)
+
                 // We need a custom error for failing validation
                 var custom_error = {
                     param : 'email',
@@ -64,6 +65,14 @@ router.post('/', [
             }
             else
             {
+                console.log('req.session', req.session)
+                req.session.valid_login = true;
+                console.log('req.session', req.session)
+
+                if( !req.session.user_type )
+                {
+                    req.session.user_type = "";
+                }
                 console.log('Here');
             }
         });

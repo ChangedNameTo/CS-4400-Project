@@ -4,6 +4,7 @@ var path         = require('path');
 var cookieParser = require('cookie-parser');
 var logger       = require('morgan');
 var bodyParser   = require('body-parser');
+var session      = require('express-session');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -22,6 +23,13 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 
 app.use(express.static(path.join(__dirname, 'public')));
+
+// session setup
+app.use(session({
+    secret            : 'cs4400 project',
+    resave            : false,
+    saveUninitialized : true
+}));
 
 // route setup
 app.use('/', indexRouter);
