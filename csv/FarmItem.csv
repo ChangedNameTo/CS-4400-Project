@@ -1,0 +1,33 @@
+Name,IsApproved,Type
+Apple,1,FRUIT
+Banana,1,FRUIT
+Orange,1,FRUIT
+Peach,1,FRUIT
+Peruvian Lily,1,FLOWER
+Sunflower,1,FLOWER
+Pineapple Sage,0,FLOWER
+Daffodil,0,FLOWER
+Onion,1,VEGETABLE
+Garlic,1,VEGETABLE
+Broccoli,1,VEGETABLE
+Carrot,0,VEGETABLE
+Corn,1,VEGETABLE
+Salami,0,VEGETABLE
+Peas,1,VEGETABLE
+Rose,1,FLOWER
+Daisy,1,FLOWER
+Peanut,1,NUT
+Cashew ,1,NUT
+Almond,0,NUT
+Fig,0,NUT
+Pig,1,ANIMAL
+Chicken,1,ANIMAL
+Cow,1,ANIMAL
+Mongoose,0,ANIMAL
+Monkey,1,ANIMAL
+Cheetah,0,ANIMAL
+Pete,0,ANIMAL
+Pineapple,0,FRUIT
+Kiwi,1,FRUIT
+Tomato,0,FRUIT
+Goat,1,ANIMAL
