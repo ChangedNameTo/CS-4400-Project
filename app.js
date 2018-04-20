@@ -9,6 +9,7 @@ var session      = require('express-session');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var loginRouter = require('./routes/login');
+var adminRouter = require('./routes/admin');
 
 var app = express();
 
@@ -35,6 +36,7 @@ app.use(session({
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/login', loginRouter);
+app.use('/admin', adminRouter);
 
 // database setup
 var mysql = require('mysql');

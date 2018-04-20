@@ -15,7 +15,6 @@ var connection = mysql.createConnection({
 /* GET login page. */
 router.get('/', function(req, res, next) {
     res.render('login', {});
-    // res.send('respond with a resource');
 });
 
 /* POST submit login form. */
@@ -47,7 +46,7 @@ router.post('/', [
             timeout : 30000, // 30s
             values  : [req.body.email, req.body.password]
         }, function (error, results, fields) {
-            if(results == null || results == [])
+            if(results == null || results == [] || results == undefined)
             {
                 console.log('req.session', req.session)
                 req.session.valid_login = false;
@@ -74,7 +73,19 @@ router.post('/', [
                 {
                     req.session.user_type = type;
                 }
-                console.log(req.session);
+
+                if(type == 'OWNER')
+                {
+                    res.redirect('/owner');
+                }
+                else if(type == 'ADMIN')
+                {
+                    res.redirect('/admin');
+                }
+                else
+                {
+                    res.redirect('/user');
+                }
             }
         });
     }
