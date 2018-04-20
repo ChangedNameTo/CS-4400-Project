@@ -43,7 +43,9 @@ router.post('/', [
     {
         // Make a db connection, check for valid password
         connection.query({
-            sql     : "SELECT Id FROM User WHERE Email like ? AND Password like ( SELECT MD5(?) );", timeout : 30000, // 30s values  : [req.body.email, req.body.password]
+            sql     : "SELECT * FROM User WHERE Email like ? AND Password LIKE ( SELECT MD5(?));",
+            timeout : 30000, // 30s
+            values  : [req.body.email, req.body.password]
         }, function (error, results, fields) {
             if(results == null || results == [])
             {
@@ -65,15 +67,14 @@ router.post('/', [
             }
             else
             {
-                console.log('req.session', req.session)
+                var type = results[0].UserType;
                 req.session.valid_login = true;
-                console.log('req.session', req.session)
 
                 if( !req.session.user_type )
                 {
-                    req.session.user_type = "";
+                    req.session.user_type = type;
                 }
-                console.log('Here');
+                console.log(req.session);
             }
         });
     }
