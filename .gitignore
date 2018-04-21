@@ -1,3 +1,6 @@
+# Swap
+*.swp
+
 # Logs
 logs
 *.log

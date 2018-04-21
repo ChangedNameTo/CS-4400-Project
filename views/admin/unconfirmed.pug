@@ -41,5 +41,55 @@ block content
                 th(
                     align = "center"
                 ) Owner
+                th(
+                    align = "center"
+                ) Actions
             each result in results
-                li() #{result.msg}
+                tr()
+                    td(
+                        style = "text-align:center;"
+                    ) #{result.Name}
+                    td(
+                        style = "text-align:center;"
+                    ) #{result.Street}
+                    td(
+                        style = "text-align:center;"
+                    ) #{result.City}
+                    td(
+                        style = "text-align:center;"
+                    ) #{result.Zip}
+                    td(
+                        style = "text-align:center;"
+                    ) #{result.Size}
+                    td(
+                        style = "text-align:center;"
+                    ) #{result.PropertyType}
+                    if result.IsPublic
+                        td(
+                            style = "text-align:center;"
+                        ) True
+                    else
+                        td(
+                            style = "text-align:center;"
+                        ) False
+                    if result.IsCommercial
+                        td(
+                            style = "text-align:center;"
+                        ) True
+                    else
+                        td(
+                            style = "text-align:center;"
+                        ) False
+                    td(
+                        style = "text-align:center;"
+                    ) #{result.ID}
+                    td(
+                        style = "text-align:center;"
+                    ) #{result.Owner}
+                    td(
+                        style = "text-align:center;"
+                    )
+                        a(
+                            class = 'ui primary fluid button',
+                            href  = "/admin/property/#{result.ID}"
+                        ) Manage
