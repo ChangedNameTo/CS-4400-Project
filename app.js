@@ -41,8 +41,8 @@ app.use('/admin', adminRouter);
 // database setup
 var mysql = require('mysql');
 var connection = mysql.createConnection({
-    host : 'localhost',
-    user : 'will',
+    host     : 'localhost',
+    user     : 'will',
     password : 'testing',
     database : 'cs4400'
 });
