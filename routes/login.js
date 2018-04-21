@@ -66,7 +66,9 @@ router.post('/', [
             }
             else
             {
-                var type = results[0].UserType;
+                var type     = results[0].UserType;
+                var userName = results[0].Username;
+
                 req.session.valid_login = true;
 
                 if( !req.session.user_type )
