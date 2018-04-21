@@ -17,4 +17,15 @@ router.get('/', function(req, res, next) {
     res.render('admin', {});
 });
 
+/* GET unconfirmed properites page. */
+router.get('/unconfirmed', function(req, res, next) {
+    connection.query({
+        sql     : "SELECT * FROM Property WHERE ApprovedBy IS null;",
+        timeout : 30000 // 30s
+    }, function (error, results, fields) {
+        console.log('results',results);
+        res.render('admin/unconfirmed', {results : results});
+    });
+});
+
 module.exports = router;
