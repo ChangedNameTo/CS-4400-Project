@@ -11,9 +11,31 @@ html
             integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=",
             crossorigin="anonymous"
         )
-        script(src="/semantic/dist/semantic.min.js")
-    body
-        div(class='ui stackable menu')
-            div(class='ui container')
-                a(href='/', class='item') Home
-        block content
+        script(
+            src="/semantic/dist/semantic.min.js"
+        )
+        script(
+            src="/tablesort/dist/tablesort.min.js"
+        )
+    div(class='ui stackable menu')
+        div(class='ui container')
+            a(href='/', class='item') Home
+    section(
+        style = "padding : 30px  0px; min-height: 87%;",
+        id    = "main"
+    )
+        body
+            block content
+    footer
+        script.
+            new Tablesort(document.getElementById('table'));
+        div(
+            class = "ui black inverted vertical footer segment"
+        )
+            div(
+                class = "ui center aligned container"
+            )
+                div(
+                    class = "seven wide column"
+                ) Site designed and built by Will Mitchell, Caroline Balmer,
+                Chelsea Thompson, Chris Larkins, and Nick Williams

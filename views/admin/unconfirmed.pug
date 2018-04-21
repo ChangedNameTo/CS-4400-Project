@@ -8,9 +8,12 @@ block content
             class = "ui centered header"
         ) Unconfirmed Properties
         table(
-            class = "ui celled striped sortable table"
+            class = "ui celled striped sortable table",
+            id    = "table"
         )
-            tr()
+            tr(
+                data-sort-method = 'none'
+            )
                 th(
                     align = "center"
                 ) Name
@@ -91,5 +94,5 @@ block content
                     )
                         a(
                             class = 'ui primary fluid button',
-                            href  = "/admin/property/#{result.ID}"
+                            href  = "/admin/property/" + result.ID
                         ) Manage
