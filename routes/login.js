@@ -48,9 +48,7 @@ router.post('/', [
         }, function (error, results, fields) {
             if(results == null || results == [] || results == undefined)
             {
-                console.log('req.session', req.session)
                 req.session.valid_login = false;
-                console.log('req.session', req.session)
 
                 // We need a custom error for failing validation
                 var custom_error = {
@@ -74,6 +72,7 @@ router.post('/', [
                 if( !req.session.user_type )
                 {
                     req.session.user_type = type;
+                    req.session.user_name = userName;
                 }
 
                 if(type == 'OWNER')

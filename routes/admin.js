@@ -1,4 +1,5 @@
-var express = require('express'); var router  = express.Router();
+var express = require('express');
+var router  = express.Router();
 
 const check            = require('express-validator/check').check;
 const validationResult = require('express-validator/check').validationResult;
@@ -199,6 +200,8 @@ router.post('/property/:id',[
     }
     else
     {
+        console.log(req.body);
+
         // Fetch the id
         req.body.id = req.params.id;
 
@@ -221,20 +224,23 @@ router.post('/property/:id',[
             req.body.iscommercial = 0;
         }
 
+        req.body.approvedby = req.session.user_name;
+
         var fields = req.body
+        console.log(fields);
 
         // Update the property
         connection.query({
-            sql     : "UPDATE `Property` SET `Name` = ?, `Size` = ?, `IsCommercial` = ?, `IsPublic` = ?, `Street` = ?, `City` = ?, `Zip` = ? WHERE ID = ?;",
+            sql     : "UPDATE `Property` SET `Name` = ?, `Size` = ?, `IsCommercial` = ?, `IsPublic` = ?, `Street` = ?, `City` = ?, `Zip` = ?, `ApprovedBy` = ? WHERE ID = ?;",
             timeout : 30000, // 30s
-            values  : [fields.name, fields.size, fields.iscommercial, fields.ispublic, fields.street, fields.city, fields.zip, fields.id]
+            values  : [fields.name, fields.size, fields.iscommercial, fields.ispublic, fields.street, fields.city, fields.zip, fields.approvedby, fields.id]
         }, function (error, results, fields) {
             res.redirect('/admin/property/' + req.params.id);
         });
     }
 });
 
-/* Update a property. */
+/* Add a FarmItem to a Property. */
 router.post('/property/has/:id',[
     check('name')
         .isLength({min:1})

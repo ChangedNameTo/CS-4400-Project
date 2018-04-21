@@ -1,5 +1,9 @@
 # Swap
 *.swp
+*.swo
+
+# Sessions
+sessions/
 
 # Logs
 logs
