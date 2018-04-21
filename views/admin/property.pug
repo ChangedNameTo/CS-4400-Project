@@ -166,75 +166,105 @@ block content
                         placeholder = result.PropertyType,
                         readonly    = ''
                     )
-            h3(
-                class = 'ui dividing header'
-            ) Property has
             div(
-                class = 'ui grid'
-            )
-                each val,index in has
-                    if val
-                        div(
-                            class = 'row'
-                        )
-                            div(
-                                class = 'sixteen wide column'
-                            )
-                                h4(
-                                    class = 'ui center aligned header'
-                                ) #{index}
-                                table(
-                                    class = 'ui celled striped table'
-                                )
-                                    tr()
-                                        th(
-                                            align = 'center'
-                                        ) #{index}
-                                        th(
-                                            align = 'center'
-                                        ) Action
-                                    if val
-                                        each value in val
-                                            tr()
-                                                td(
-                                                    align = 'center'
-                                                ) #{value.Name}
-                                                td(
-                                                    align = 'center'
-                                                )
-                                                    a(
-                                                        class   = 'ui fluid red button',
-                                                        href    = '/admin/has/delete/' + value.Name + '-' + value.PropertyID
-                                                        onclick = "return confirm('Are you sure? Form changes will not be saved')"
-                                                    ) Delete
-                                    else
-                                        tr()
-                                            td(
-                                                colspan = '2',
-                                                align   = 'center'
-                                            ) No Animals
-            br()
-            br()
-            div(
-                class = 'ui grid'
+                class = 'row'
             )
                 div(
-                    class = 'row'
+                    class = 'eight wide column'
                 )
-                    div(
-                        class = 'eight wide column'
+                    input(
+                        type              = 'submit',
+                        name              = 'commit',
+                        value             = 'Submit (Save Changes)',
+                        class             = 'ui primary fluid button',
+                        data-disable-with = 'Submit'
                     )
-                        input(
-                            type              = 'submit',
-                            name              = 'commit',
-                            value             = 'Submit (Save Changes)',
-                            class             = 'ui primary fluid button',
-                            data-disable-with = 'Submit'
+        h3(
+            class = 'ui dividing header'
+        ) Property has
+        div(
+            class = 'ui grid'
+        )
+            each val,index in has
+                if val
+                    div(
+                        class = 'row'
+                    )
+                        div(
+                            class = 'sixteen wide column'
                         )
-                    div(
-                        class = 'eight wide column'
-                    )
-                        a(
-                            class = 'ui red fluid button',
-                            href  = '/admin/confirmed'
-                        )| Back (Changes will not be saved)
+                            h4(
+                                class = 'ui center aligned header'
+                            ) #{index}
+                            table(
+                                class = 'ui celled striped table'
+                            )
+                                tr()
+                                    th(
+                                        align = 'center'
+                                    ) #{index}
+                                    th(
+                                        align = 'center'
+                                    ) Action
+                                if val.have != null
+                                    each value in val.have
+                                        tr()
+                                            td(
+                                                align = 'center'
+                                            ) #{value.Name}
+                                            td(
+                                                align = 'center'
+                                            )
+                                                a(
+                                                    class   = 'ui fluid red button',
+                                                    href    = '/admin/has/delete/' + value.Name + '-' + value.PropertyID
+                                                    onclick = "return confirm('Are you sure? Form changes will not be saved')"
+                                                ) Delete
+                                else
+                                    tr()
+                                        td(
+                                            colspan = '2',
+                                            align   = 'center'
+                                        ) No Animals
+
+                            if val.not != null
+                                div(
+                                    class = 'ui grid'
+                                )
+                                    div(
+                                        class = 'row'
+                                    )
+                                        div(
+                                            class = 'sixteen wide column'
+                                        )
+                                            form(
+                                                class = 'ui form error',
+                                                action = '/admin/property/has/' + result.ID,
+                                                method = 'post'
+                                            )
+                                                div(
+                                                    class = 'fields'
+                                                )
+                                                    select(
+                                                        class = 'ui dropdown',
+                                                        name = 'name'
+                                                    )
+                                                        option(
+                                                            value = ''
+                                                        ) Add new #{index}
+                                                        each not_item in val.not
+                                                            option(
+                                                                value = not_item.Name
+                                                            ) #{not_item.Name}
+                                                input(
+                                                    type              = 'submit',
+                                                    value             = 'Save new ' + index,
+                                                    class             = 'ui primary fluid button',
+                                                    data-disable-with = 'Submit'
+                                                )
+        br()
+        br()
+        a(
+            class = 'ui green fluid button',
+            href  = '/admin/confirmed'
+        )| Back (Changes will not be saved)
