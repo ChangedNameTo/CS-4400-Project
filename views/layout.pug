@@ -28,7 +28,10 @@ html
             block content
     footer
         script.
-            new Tablesort(document.getElementById('table'));
+            if(document.getElementById('table'))
+            {
+                new Tablesort(document.getElementById('table'));
+            }
         div(
             class = "ui black inverted vertical footer segment"
         )

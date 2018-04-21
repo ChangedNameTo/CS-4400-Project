@@ -6,7 +6,7 @@ block content
     )
         h1(
             class = "ui centered header"
-        ) Unconfirmed Properties
+        ) Confirmed Properties
         table(
             class = "ui celled striped sortable table",
             id    = "table"
@@ -43,7 +43,10 @@ block content
                 ) ID
                 th(
                     align = "center"
-                ) Owner
+                ) Verified by
+                th(
+                    align = "center"
+                ) Avg. Rating
                 th(
                     align = "center"
                 ) Actions
@@ -88,7 +91,10 @@ block content
                     ) #{result.ID}
                     td(
                         style = "text-align:center;"
-                    ) #{result.Owner}
+                    ) #{result.ApprovedBy}
+                    td(
+                        style = "text-align:center;"
+                    ) #{result.Rating}
                     td(
                         style = "text-align:center;"
                     )
