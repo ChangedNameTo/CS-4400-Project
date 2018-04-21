@@ -11,7 +11,7 @@ block content
         form(
             class  = 'ui form error',
             action = '/admin/property/' + result.ID,
-            method = 'put'
+            method = 'post'
         )
             if errors
                 div(
@@ -100,17 +100,43 @@ block content
                 class = 'fields'
             )
                 div(
-                    class = 'required eight wide field'
+                    class = 'required eight wide inline field'
                 )
-                    label(
-                        for = 'Public'
-                    )| Type: Commercial
+                    div(
+                        class = 'ui toggle checkbox'
+                    )
+                        if result.IsCommercial
+                            input(
+                                type    = 'checkbox',
+                                name    = 'iscommercial'
+                                checked = 'checked'
+                            )
+                        else
+                            input(
+                                type    = 'checkbox'
+                            )
+                        label(
+                            for = 'IsCommercial'
+                        )| Is Commercial?
                 div(
-                    class = 'required eight wide field'
+                    class = 'required eight wide inline field'
                 )
-                    label(
-                        for = 'IsPublic'
-                    )| Public:
+                    div(
+                        class = 'ui toggle checkbox'
+                    )
+                        if result.IsPublic
+                            input(
+                                type    = 'checkbox',
+                                name    = 'ispublic'
+                                checked = 'checked'
+                            )
+                        else
+                            input(
+                                type    = 'checkbox'
+                            )
+                        label(
+                            for = 'IsPublic'
+                        )| Is Public?
             div(
                 class = 'fields'
             )
@@ -177,7 +203,8 @@ block content
                                                     align = 'center'
                                                 )
                                                     a(
-                                                        class = 'ui fluid red button',
+                                                        class   = 'ui fluid red button',
+                                                        href    = '/admin/has/delete/' + value.Name + '-' + value.PropertyID
                                                         onclick = "return confirm('Are you sure? Form changes will not be saved')"
                                                     ) Delete
                                     else
@@ -188,10 +215,26 @@ block content
                                             ) No Animals
             br()
             br()
-            input(
-                type              = 'submit',
-                name              = 'commit',
-                value             = 'Submit (Save Changes)',
-                class             = 'ui primary fluid button',
-                data-disable-with = 'Submit'
+            div(
+                class = 'ui grid'
             )
+                div(
+                    class = 'row'
+                )
+                    div(
+                        class = 'eight wide column'
+                    )
+                        input(
+                            type              = 'submit',
+                            name              = 'commit',
+                            value             = 'Submit (Save Changes)',
+                            class             = 'ui primary fluid button',
+                            data-disable-with = 'Submit'
+                        )
+                    div(
+                        class = 'eight wide column'
+                    )
+                        a(
+                            class = 'ui red fluid button',
+                            href  = '/admin/confirmed'
+                        )| Back (Changes will not be saved)
