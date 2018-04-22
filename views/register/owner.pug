@@ -1,0 +1,234 @@
+extends ../layout
+
+block content
+    div(
+        class = "ui container segment"
+    )
+        h1(
+            class = "ui centered header"
+        ) New Owner Registration
+
+        form(
+            class  = 'ui form error',
+            action = '/register/owner/',
+            method = 'post'
+        )
+            if errors
+                div(
+                    id    = 'error_explanation',
+                    class = "ui error message"
+                )
+                    h3(
+                        class = 'ui left aligned header'
+                    )| These errors prevented this record from being updated:
+                    ul
+                        each error in errors
+                            li() #{error.msg}
+            h3(
+                class = 'ui dividing header'
+            ) Account Information
+            div(
+                class = 'fields'
+            )
+                div(
+                    class = 'required eight wide field'
+                )
+                    label(
+                        for = 'email'
+                    )| Email:
+                    input(
+                        type  = 'text',
+                        name  = 'email',
+                        id    = 'email',
+                    )
+                div(
+                    class = 'required eight wide field'
+                )
+                    label(
+                        for = 'username'
+                    )| Username:
+                    input(
+                        type  = 'text',
+                        name  = 'username',
+                        id    = 'username',
+                    )
+            div(
+                class = 'fields'
+            )
+                div(
+                    class = 'required eight wide field'
+                )
+                    label(
+                        for = 'password'
+                    )| Password:
+                    input(
+                        type  = 'password',
+                        name  = 'password',
+                        id    = 'password',
+                    )
+                div(
+                    class = 'required eight wide field'
+                )
+                    label(
+                        for = 'confirm'
+                    )| Confirm Password:
+                    input(
+                        type  = 'password',
+                        name  = 'confirm',
+                        id    = 'confirm',
+                    )
+            h3(
+                class = "ui dividing header"
+            ) Basic Information
+            div(
+                class = 'fields'
+            )
+                div(
+                    class = 'required eight wide field'
+                )
+                    label(
+                        for = 'name'
+                    )| Name:
+                    input(
+                        type  = 'text',
+                        name  = 'name',
+                        id    = 'name'
+                    )
+                div(
+                    class = 'required eight wide field'
+                )
+                    label(
+                        for = 'Address'
+                    )| Address:
+                    input(
+                        type  = 'text',
+                        name  = 'street',
+                        id    = 'street'
+                    )
+            div(
+                class = 'fields'
+            )
+                div(
+                    class = 'required six wide field'
+                )
+                    label(
+                        for = 'city'
+                    )| City:
+                    input(
+                        type  = 'text',
+                        name  = 'city',
+                        id    = 'city'
+                    )
+                div(
+                    class = 'required six wide field'
+                )
+                    label(
+                        for = 'zip'
+                    )| Zip:
+                    input(
+                        type  = 'text',
+                        name  = 'zip',
+                        id    = 'zip'
+                    )
+                div(
+                    class = 'required four wide field'
+                )
+                    label(
+                        for = 'size'
+                    )| Size:
+                    input(
+                        type  = 'text',
+                        name  = 'size',
+                        id    = 'size'
+                    )
+            h3(
+                class = "ui dividing header"
+            ) Classifying Information
+            div(
+                class = 'fields'
+            )
+                div(
+                    class = 'required eight wide inline field'
+                )
+                    div(
+                        class = 'ui toggle checkbox'
+                    )
+                        input(
+                            name    = 'iscommercial',
+                            type    = 'checkbox'
+                        )
+                        label(
+                            for = 'IsCommercial'
+                        )| Is Commercial?
+                div(
+                    class = 'required eight wide inline field'
+                )
+                    div(
+                        class = 'ui toggle checkbox'
+                    )
+                        input(
+                            name    = 'ispublic',
+                            type    = 'checkbox'
+                        )
+                        label(
+                            for = 'IsPublic'
+                        )| Is Public?
+            div(
+                class = 'fields'
+            )
+                div(
+                    class = 'required eight wide field'
+                )
+                    label(
+                        for = 'id'
+                    )| ID:
+                    input(
+                        type  = 'text',
+                        name  = 'id',
+                        id    = 'id'
+                    )
+                div(
+                    class = 'required eight wide field'
+                )
+                    label(
+                        for = 'propertytype'
+                    )| Property Type:
+                    select(
+                        class = 'ui dropdown',
+                        name = 'propertytype'
+                    )
+                        option(
+                            value = ''
+                        ) Select Property Type
+                        option(
+                            value = 'FARM'
+                        ) FARM
+                        option(
+                            value = 'GARDEN'
+                        ) GARDEN
+                        option(
+                            value = 'ORCHARD'
+                        ) ORCHARD
+            div(
+                class = 'ui grid'
+            )
+                div(
+                    class = 'row'
+                )
+                    div(
+                        class = 'eight wide column'
+                    )
+                        input(
+                            type              = 'submit',
+                            name              = 'commit',
+                            value             = 'Submit (Save Changes)',
+                            class             = 'ui primary fluid button',
+                            data-disable-with = 'Submit'
+                        )
+                    div(
+                        class = 'eight wide column'
+                    )
+                        a(
+                            class = 'ui red fluid button',
+                            href  = '/'
+                        )| Back (Changes will not be saved)

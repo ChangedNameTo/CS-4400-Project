@@ -139,14 +139,42 @@ router.post('/owner', [
         .isLength({min:1})
         .withMessage('Passwords must match!.')
         .trim()
-        .custom((value, { req }) => value === req.body.password)
+        .custom((value, { req }) => value === req.body.password),
+    check('name')
+        .isLength({min:1})
+        .withMessage('Name is required.')
+        .trim(),
+    check('street')
+        .isLength({min:1})
+        .withMessage('Street is required.')
+        .trim(),
+    check('city')
+        .isLength({min:1})
+        .withMessage('City is required.')
+        .trim(),
+    check('zip')
+        .isLength({min:1})
+        .withMessage('Zip is required.')
+        .trim(),
+    check('size')
+        .isLength({min:1})
+        .withMessage('Size is required.')
+        .trim(),
+    check('id')
+        .isLength({min:1})
+        .withMessage('Size is required.')
+        .trim(),
+    check('propertytype')
+        .isLength({min:1})
+        .withMessage('Property Type is required.')
+        .trim()
 
 ], (req, res) => {
     // Checks for the existance of errors
     const errors = validationResult(req);
     if(!errors.isEmpty())
     {
-        res.render('register/visitor', {
+        res.render('register/owner', {
             errors : errors.mapped()
         });
     }
@@ -196,13 +224,41 @@ router.post('/owner', [
                     else
                     {
                         connection.query({
-                            sql     : "INSERT INTO User (Username,Email,Password,UserType) VALUES (?,?,MD5(?),'VISITOR');",
+                            sql     : "INSERT INTO User (Username,Email,Password,UserType) VALUES (?,?,MD5(?),'OWNER');",
                             timeout : 30000, // 30s
                             values  : [data.username,data.email,data.password]
                         }, function (error, results, fields) {
                             if(!error)
                             {
-                                res.render('login', {});
+                                // Now that the registration is done we can add the property
+                                // Normallize IsPublic and IsCommercial
+                                if(req.body.ispublic)
+                                {
+                                    req.body.ispublic = 1;
+                                }
+                                else
+                                {
+                                    req.body.ispublic = 0;
+                                }
+
+                                if(req.body.iscommercial)
+                                {
+                                    req.body.iscommercial = 1;
+                                }
+                                else
+                                {
+                                    req.body.iscommercial = 0;
+                                }
+
+                                var data = req.body;
+                                // Insert the new item
+                                connection.query({
+                                    sql     : "INSERT INTO Property (Name,Size,IsCommercial,IsPublic,Street,City,Zip,PropertyType,Owner,ID) VALUES (?,?,?,?,?,?,?,?,?,?);",
+                                    timeout : 30000, // 30s
+                                    values  : [data.name,data.size,data.iscommercial,data.ispublic,data.street,data.city,data.zip,data.propertytype,data.username,data.id]
+                                }, function (error, results, fields) {
+                                    res.redirect('/');
+                                });
                             }
                             else
                             {
