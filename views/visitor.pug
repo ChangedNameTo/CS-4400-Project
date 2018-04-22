@@ -1,0 +1,108 @@
+extends layout
+
+block content
+    div(
+        class = "ui container segment"
+    )
+        h1(
+            class = "ui centered header"
+        ) All Public, Confirmed Properties
+        table(
+            class = "ui celled striped sortable table",
+            id    = "table"
+        )
+            tr(
+                data-sort-method = 'none'
+            )
+                th(
+                    align = "center"
+                ) Name
+                th(
+                    align = "center"
+                ) Address
+                th(
+                    align = "center"
+                ) City
+                th(
+                    align = "center"
+                ) Zip
+                th(
+                    align = "center"
+                ) Size
+                th(
+                    align = "center"
+                ) Type
+                th(
+                    align = "center"
+                ) Public
+                th(
+                    align = "center"
+                ) Commercial
+                th(
+                    align = "center"
+                ) Visit Count
+                th(
+                    align = "center"
+                ) Verified by
+                th(
+                    align = "center"
+                ) Avg. Rating
+                th(
+                    align = "center"
+                ) Actions
+            each result in results
+                tr()
+                    td(
+                        style = "text-align:center;"
+                    ) #{result.Name}
+                    td(
+                        style = "text-align:center;"
+                    ) #{result.Street}
+                    td(
+                        style = "text-align:center;"
+                    ) #{result.City}
+                    td(
+                        style = "text-align:center;"
+                    ) #{result.Zip}
+                    td(
+                        style = "text-align:center;"
+                    ) #{result.Size}
+                    td(
+                        style = "text-align:center;"
+                    ) #{result.PropertyType}
+                    if result.IsPublic
+                        td(
+                            style = "text-align:center;"
+                        ) True
+                    else
+                        td(
+                            style = "text-align:center;"
+                        ) False
+                    if result.IsCommercial
+                        td(
+                            style = "text-align:center;"
+                        ) True
+                    else
+                        td(
+                            style = "text-align:center;"
+                        ) False
+                    td(
+                        style = "text-align:center;"
+                    ) #{result.VisitCount}
+                    td(
+                        style = "text-align:center;"
+                    ) #{result.ApprovedBy}
+                    td(
+                        style = "text-align:center;"
+                    ) #{result.Rating}
+                    td(
+                        style = "text-align:center;"
+                    )
+                        a(
+                            class = 'ui primary fluid button',
+                            href  = "/admin/property/" + result.ID
+                        ) Manage
+        a(
+            class = "ui red fluid button",
+            href = "/logout"
+        ) Log Out

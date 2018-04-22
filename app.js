@@ -10,11 +10,12 @@ var session   = require('express-session');
 var FileStore = require('session-file-store')(session);
 
 
-var indexRouter  = require('./routes/index');
-var usersRouter  = require('./routes/users');
-var loginRouter  = require('./routes/login');
-var adminRouter  = require('./routes/admin');
-var logoutRouter = require('./routes/logout');
+var indexRouter   = require('./routes/index');
+var usersRouter   = require('./routes/users');
+var loginRouter   = require('./routes/login');
+var adminRouter   = require('./routes/admin');
+var visitorRouter = require('./routes/visitor');
+var logoutRouter  = require('./routes/logout');
 
 var app = express();
 
@@ -45,11 +46,12 @@ app.use(function(req, res, next) {
 });
 
 // route setup
-app.use('/',       indexRouter);
-app.use('/users',  usersRouter);
-app.use('/login',  loginRouter);
-app.use('/admin',  adminRouter);
-app.use('/logout', logoutRouter);
+app.use('/',        indexRouter);
+app.use('/users',   usersRouter);
+app.use('/login',   loginRouter);
+app.use('/admin',   adminRouter);
+app.use('/logout',  logoutRouter);
+app.use('/visitor', visitorRouter);
 
 // database setup
 var mysql = require('mysql');

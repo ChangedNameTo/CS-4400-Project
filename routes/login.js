@@ -46,7 +46,6 @@ router.post('/', [
             timeout : 30000, // 30s
             values  : [req.body.email, req.body.password]
         }, function (error, results, fields) {
-            console.log(results);
             if(results == null || results == [] || results == undefined)
             {
                 // We need a custom error for failing validation
@@ -84,7 +83,7 @@ router.post('/', [
                 }
                 else
                 {
-                    res.redirect('/user');
+                    res.redirect('/visitor');
                 }
             }
         });
