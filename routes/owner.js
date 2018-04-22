@@ -42,116 +42,128 @@ router.get('/other_properties', function(req, res, next) {
 
 /* GET unconfirmed properites page. */
 router.get('/property/:id', function(req, res, next) {
-    var has = {};
+    var property_result = {};
 
-    // Get has
+    // Get property info
     connection.query({
-        sql     : "SELECT Name, `IsApproved`, PropertyID, Type FROM `Has` h JOIN `FarmItem` f ON h.`ItemName` = f.Name WHERE h.`PropertyID` = ?;",
+        sql     : "SELECT * FROM Property WHERE ID LIKE ?;",
         timeout : 30000, // 30s
         values  : req.params.id
-    }, function (error, results, fields) {
-        has = results;
+    }, function (error, result, fields) {
+        // Only grabs one result
+        property_result = result[0];
 
-        var dont_have = {};
+        var has = {};
 
-        // Get Don't haves
+        // Get has
         connection.query({
-            sql     : "SELECT * FROM FarmItem WHERE Name NOT IN (SELECT Name FROM `Has` h JOIN `FarmItem` f ON h.`ItemName` = f.Name WHERE h.`PropertyID` = ?) AND IsApproved = 1;",
+            sql     : "SELECT Name, `IsApproved`, PropertyID, Type FROM `Has` h JOIN `FarmItem` f ON h.`ItemName` = f.Name WHERE h.`PropertyID` = ?;",
             timeout : 30000, // 30s
             values  : req.params.id
         }, function (error, results, fields) {
-            dont_have = results;
+            has = results;
 
-            var animals       = {};
-            var fruits        = {};
-            var vegetables    = {};
-            var flowers       = {};
-            var nuts          = {};
+            var dont_have = {};
 
-            animals['have']    = [];
-            fruits['have']     = [];
-            vegetables['have'] = [];
-            flowers['have']    = [];
-            nuts['have']       = [];
+            // Get Don't haves
+            connection.query({
+                sql     : "SELECT * FROM FarmItem WHERE Name NOT IN (SELECT Name FROM `Has` h JOIN `FarmItem` f ON h.`ItemName` = f.Name WHERE h.`PropertyID` = ?) AND IsApproved = 1;",
+                timeout : 30000, // 30s
+                values  : req.params.id
+            }, function (error, results, fields) {
+                dont_have = results;
 
-            animals['not']    = [];
-            fruits['not']     = [];
-            vegetables['not'] = [];
-            flowers['not']    = [];
-            nuts['not']       = [];
+                var animals       = {};
+                var fruits        = {};
+                var vegetables    = {};
+                var flowers       = {};
+                var nuts          = {};
 
-            // Parse results for have
-            has.forEach(function(item){
-                switch(item.Type)
+                animals['have']    = [];
+                fruits['have']     = [];
+                vegetables['have'] = [];
+                flowers['have']    = [];
+                nuts['have']       = [];
+
+                animals['not']    = [];
+                fruits['not']     = [];
+                vegetables['not'] = [];
+                flowers['not']    = [];
+                nuts['not']       = [];
+
+                // Parse results for have
+                has.forEach(function(item){
+                    switch(item.Type)
+                    {
+                        case 'ANIMAL':
+                            animals['have'].push(item);
+                            break;
+                        case 'FRUIT':
+                            fruits['have'].push(item);
+                            break;
+                        case 'FLOWER':
+                            flowers['have'].push(item);
+                            break;
+                        case 'VEGETABLE':
+                            vegetables['have'].push(item);
+                            break;
+                        case 'NUT':
+                            nuts['have'].push(item);
+                            break;
+                    }
+                });
+
+                // Parse results for don't have
+                dont_have.forEach(function(item){
+                    switch(item.Type)
+                    {
+                        case 'ANIMAL':
+                            animals['not'].push(item);
+                            break;
+                        case 'FRUIT':
+                            fruits['not'].push(item);
+                            break;
+                        case 'FLOWER':
+                            flowers['not'].push(item);
+                            break;
+                        case 'VEGETABLE':
+                            vegetables['not'].push(item);
+                            break;
+                        case 'NUT':
+                            nuts['not'].push(item);
+                            break;
+                    }
+                });
+
+                // Dump the arrays in to this map
+                var better_has = {};
+                better_has['Animals']    = animals;
+                better_has['Fruits']     = fruits;
+                better_has['Flowers']    = flowers;
+                better_has['Vegetables'] = vegetables;
+                better_has['Nuts']       = nuts;
+
+                switch(property_result.PropertyType)
                 {
-                    case 'ANIMAL':
-                        animals['have'].push(item);
+                    case 'FARM':
                         break;
-                    case 'FRUIT':
-                        fruits['have'].push(item);
+                    case 'GARDEN':
+                        better_has['Animals'] = null;
+                        better_has['Fruits'] = null;
+                        better_has['Nuts'] = null;
                         break;
-                    case 'FLOWER':
-                        flowers['have'].push(item);
-                        break;
-                    case 'VEGETABLE':
-                        vegetables['have'].push(item);
-                        break;
-                    case 'NUT':
-                        nuts['have'].push(item);
+                    case 'ORCHARD':
+                        better_has['Animals'] = null;
+                        better_has['Vegetables'] = null;
+                        better_has['Flowers'] = null;
                         break;
                 }
-            });
 
-            // Parse results for don't have
-            dont_have.forEach(function(item){
-                switch(item.Type)
-                {
-                    case 'ANIMAL':
-                        animals['not'].push(item);
-                        break;
-                    case 'FRUIT':
-                        fruits['not'].push(item);
-                        break;
-                    case 'FLOWER':
-                        flowers['not'].push(item);
-                        break;
-                    case 'VEGETABLE':
-                        vegetables['not'].push(item);
-                        break;
-                    case 'NUT':
-                        nuts['not'].push(item);
-                        break;
-                }
-            });
-
-            // Dump the arrays in to this map
-            var better_has = {};
-            better_has['Animals']    = animals;
-            better_has['Fruits']     = fruits;
-            better_has['Flowers']    = flowers;
-            better_has['Vegetables'] = vegetables;
-            better_has['Nuts']       = nuts;
-
-            switch(property_result.PropertyType)
-            {
-                case 'FARM':
-                    break;
-                case 'GARDEN':
-                    better_has['Animals'] = null;
-                    better_has['Fruits'] = null;
-                    better_has['Nuts'] = null;
-                    break;
-                case 'ORCHARD':
-                    better_has['Animals'] = null;
-                    better_has['Vegetables'] = null;
-                    better_has['Flowers'] = null;
-                    break;
-            }
-
-            // Render the page
-            res.render('owner/property', {
-                result : property_result,
-                has    : better_has
+                // Render the page
+                res.render('owner/property', {
+                    result : property_result,
+                    has    : better_has
+                });
             });
         });
     });
@@ -297,8 +309,9 @@ router.post('/property/has/:id',[
     const errors = validationResult(req);
     if(!errors.isEmpty())
     {
-        // FIX ME IF YOU HAVE TIME
-        console.log(errors);
+        res.render('/owner/property/' + req.params.id, {
+            errors : errors.mapped()
+        });
     }
     else
     {
@@ -371,13 +384,13 @@ router.post('/new_property/', [
         .withMessage('Property Type is required.')
         .trim()
 ], (req, res) => {
-    console.log(req.body);
     // Checks for the existance of errors
     const errors = validationResult(req);
     if(!errors.isEmpty())
     {
-        // FIX ME IF YOU HAVE TIME
-        console.log(errors);
+        res.render('owner/add_property', {
+            errors : errors.mapped()
+        });
     }
     else
     {
@@ -408,8 +421,7 @@ router.post('/new_property/', [
             timeout : 30000, // 30s
             values  : [fields.name,fields.size,fields.iscommercial,fields.ispublic,fields.street,fields.city,fields.zip,fields.propertytype,req.session.user_name,fields.id]
         }, function (error, results, fields) {
-            console.log(results);
-            res.redirect('/owner/');
+            res.redirect('/owner/property/' + req.body.id);
         });
     }
 });
