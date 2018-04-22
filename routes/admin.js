@@ -433,4 +433,54 @@ router.post('/items_approved/approve', [
     }
 });
 
+/* GET all visitors page. */
+router.get('/items_unapproved', function(req, res, next) {
+    var approved = {};
+
+    connection.query({
+        sql     : "SELECT Name, Type FROM FarmItem WHERE IsApproved = 1;",
+        timeout : 30000 // 30s
+    }, function (error, results, fields) {
+        var unapproved = {};
+
+        approved = results;
+
+        connection.query({
+            sql     : "SELECT Name, Type FROM FarmItem WHERE IsApproved = 0;",
+            timeout : 30000 // 30s
+        }, function (error, results, fields) {
+            res.render('admin/items_unapproved', {
+                approved   : approved,
+                unapproved : results
+            });
+        });
+    });
+});
+
+/* Approve new farm item */
+router.post('/items_unapproved/approve', [
+    check('name')
+        .isLength({min:1})
+        .trim()
+], (req, res) => {
+    // Checks for the existance of errors
+    const errors = validationResult(req);
+    if(!errors.isEmpty())
+    {
+        // FIX ME IF YOU HAVE TIME
+        console.log(errors);
+    }
+    else
+    {
+        // Insert the new item
+        connection.query({
+            sql     : "UPDATE FarmItem SET IsApproved = 1 WHERE Name = ?;",
+            timeout : 30000, // 30s
+            values  : [req.body.name]
+        }, function (error, results, fields) {
+            res.redirect('/admin/items_unapproved');
+        });
+    }
+});
+
 module.exports = router;
