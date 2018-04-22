@@ -46,10 +46,9 @@ router.post('/', [
             timeout : 30000, // 30s
             values  : [req.body.email, req.body.password]
         }, function (error, results, fields) {
+            console.log(results);
             if(results == null || results == [] || results == undefined)
             {
-                req.session.valid_login = false;
-
                 // We need a custom error for failing validation
                 var custom_error = {
                     param : 'email',
