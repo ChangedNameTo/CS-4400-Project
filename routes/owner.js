@@ -300,4 +300,52 @@ router.get('/other_property/:id', function(req, res, next) {
     });
 });
 
+/* Add a FarmItem to a Property. */
+router.post('/property/has/:id',[
+    check('name')
+        .isLength({min:1})
+        .withMessage('Name is required.')
+        .trim()
+], (req, res) => {
+    // Checks for the existance of errors
+    const errors = validationResult(req);
+    if(!errors.isEmpty())
+    {
+        // FIX ME IF YOU HAVE TIME
+        console.log(errors);
+    }
+    else
+    {
+        // Fetch the id
+        req.body.id = req.params.id;
+
+        var fields = req.body
+
+        // Insert the new item
+        connection.query({
+            sql     : "INSERT INTO `Has` (PropertyID, ItemName) VALUES (?, ?);",
+            timeout : 30000, // 30s
+            values  : [fields.id, fields.name]
+        }, function (error, results, fields) {
+            res.redirect('/owner/property/' + req.params.id);
+        });
+    }
+});
+
+
+/* DELETE an item from HAS. */
+router.get('/has/delete/:name-:id', function(req, res, next) {
+    // Get vars
+    var name = req.params.name;
+    var id   = req.params.id;
+
+    connection.query({
+        sql     : "DELETE FROM `Has` WHERE `ItemName` = ? AND `PropertyID` = ?;",
+        timeout : 30000, // 30s
+        values  : [name, id]
+    }, function (error, results, fields) {
+        res.redirect('/owner/property/' + id);
+    });
+});
+
 module.exports = router;
