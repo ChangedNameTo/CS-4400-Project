@@ -40,10 +40,10 @@ block content
                 ) Commercial
                 th(
                     align = "center"
-                ) Visit Count
+                ) ID
                 th(
                     align = "center"
-                ) Verified by
+                ) Visit Count
                 th(
                     align = "center"
                 ) Avg. Rating
@@ -88,10 +88,10 @@ block content
                         ) False
                     td(
                         style = "text-align:center;"
-                    ) #{result.VisitCount}
+                    ) #{result.ID}
                     td(
                         style = "text-align:center;"
-                    ) #{result.ApprovedBy}
+                    ) #{result.VisitCount}
                     td(
                         style = "text-align:center;"
                     ) #{result.Rating}
@@ -100,8 +100,13 @@ block content
                     )
                         a(
                             class = 'ui primary fluid button',
-                            href  = "/admin/property/" + result.ID
-                        ) Manage
+                            href  = "/visitor/property/" + result.ID
+                        ) View
+        a(
+            class = "ui green fluid button",
+            href = "/logout"
+        ) View Visit History
+        br()
         a(
             class = "ui red fluid button",
             href = "/logout"
