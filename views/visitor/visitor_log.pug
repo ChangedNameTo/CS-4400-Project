@@ -40,6 +40,11 @@ block content
                     td(
                         style = "text-align:center;"
                     )
+                        a(
+                            class = 'ui primary button',
+                            href  = '/visitor/property/' + result.PropertyID
+                        ) Show Property
+                        br()
                         form(
                             action = '/visitor/delete_visit',
                             class  = 'ui form error',
