@@ -1,0 +1,123 @@
+extends layout
+
+block content
+    div(
+        class = "ui container segment"
+    )
+        h1(
+            class = "ui centered header"
+        ) Welcome #{session.user_name}
+        table(
+            class = "ui celled striped sortable table",
+            id    = "table"
+        )
+            tr(
+                data-sort-method = 'none'
+            )
+                th(
+                    align = "center"
+                ) Name
+                th(
+                    align = "center"
+                ) Address
+                th(
+                    align = "center"
+                ) City
+                th(
+                    align = "center"
+                ) Zip
+                th(
+                    align = "center"
+                ) Size
+                th(
+                    align = "center"
+                ) Type
+                th(
+                    align = "center"
+                ) Public
+                th(
+                    align = "center"
+                ) Commercial
+                th(
+                    align = "center"
+                ) ID
+                th(
+                    align = "center"
+                ) Verified?
+                th(
+                    align = "center"
+                ) Avg. Rating
+                th(
+                    align = "center"
+                ) Actions
+            each result in results
+                tr()
+                    td(
+                        style = "text-align:center;"
+                    ) #{result.Name}
+                    td(
+                        style = "text-align:center;"
+                    ) #{result.Street}
+                    td(
+                        style = "text-align:center;"
+                    ) #{result.City}
+                    td(
+                        style = "text-align:center;"
+                    ) #{result.Zip}
+                    td(
+                        style = "text-align:center;"
+                    ) #{result.Size}
+                    td(
+                        style = "text-align:center;"
+                    ) #{result.PropertyType}
+                    if result.IsPublic
+                        td(
+                            style = "text-align:center;"
+                        ) True
+                    else
+                        td(
+                            style = "text-align:center;"
+                        ) False
+                    if result.IsCommercial
+                        td(
+                            style = "text-align:center;"
+                        ) True
+                    else
+                        td(
+                            style = "text-align:center;"
+                        ) False
+                    td(
+                        style = "text-align:center;"
+                    ) #{result.ID}
+                    if result.ApprovedBy
+                        td(
+                            style = "text-align:center;"
+                        ) True
+                    else
+                        td(
+                            style = "text-align:center;"
+                        ) False
+                    td(
+                        style = "text-align:center;"
+                    ) #{result.Rating}
+                    td(
+                        style = "text-align:center;"
+                    )
+                        a(
+                            class = 'ui primary fluid button',
+                            href  = "/admin/property/" + result.ID
+                        ) Manage
+        a(
+            class = "ui green fluid button",
+            href  = "/owner/add_property"
+        ) Add Property
+        br()
+        a(
+            class = "ui blue fluid button",
+            href  = "/owner/other_properties"
+        ) Other Properties
+        br()
+        a(
+            class = "ui red fluid button",
+            href  = "/logout"
+        ) Log Out

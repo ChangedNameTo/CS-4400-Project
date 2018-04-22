@@ -14,6 +14,7 @@ var indexRouter   = require('./routes/index');
 var usersRouter   = require('./routes/users');
 var loginRouter   = require('./routes/login');
 var adminRouter   = require('./routes/admin');
+var ownerRouter   = require('./routes/owner');
 var visitorRouter = require('./routes/visitor');
 var logoutRouter  = require('./routes/logout');
 
@@ -50,6 +51,7 @@ app.use('/',        indexRouter);
 app.use('/users',   usersRouter);
 app.use('/login',   loginRouter);
 app.use('/admin',   adminRouter);
+app.use('/owner',   ownerRouter);
 app.use('/logout',  logoutRouter);
 app.use('/visitor', visitorRouter);
 
