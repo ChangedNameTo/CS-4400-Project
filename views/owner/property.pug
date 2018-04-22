@@ -4,6 +4,13 @@ block content
     div(
         class = "ui container segment"
     )
+        if destroy
+            div(
+                class = 'ui error message'
+            )
+                h3(
+                    class = 'ui center aligned header'
+                ) If there are no items added to has, this property will be deleted!
         h1(
             class = "ui centered header"
         ) Manage #{result.Name}
@@ -265,7 +272,13 @@ block content
                                                     data-disable-with = 'Submit'
                                                 )
         br()
-        a(
-            class = 'ui green fluid button',
-            href  = '/owner/'
-        )| Back (Changes will not be saved)
+        if destroy
+            a(
+                class = 'ui red fluid button',
+                href  = '/owner/?destroy=true'
+            )| Back (Property will be deleted!)
+        else
+            a(
+                class = 'ui green fluid button',
+                href  = '/owner/'
+            )| Back (Changes will not be saved)

@@ -28,10 +28,16 @@ html
                         class = 'item'
                     ) Home
                 if session.user_type == 'OWNER'
-                    a(
-                        href  = '/owner',
-                        class = 'item'
-                    ) Home
+                    if destroy
+                        a(
+                            href  = '/owner/?destroy=true',
+                            class = 'item'
+                        ) Home
+                    else
+                        a(
+                            href  = '/owner',
+                            class = 'item'
+                        ) Home
                 if session.user_type == 'ADMIN'
                     a(
                         href  = '/admin',

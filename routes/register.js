@@ -223,6 +223,11 @@ router.post('/owner', [
                     }
                     else
                     {
+                        // Set the user session
+                        req.session.valid_login = true;
+                        req.session.user_type   = 'OWNER';
+                        req.session.user_name   = data.username;
+
                         connection.query({
                             sql     : "INSERT INTO User (Username,Email,Password,UserType) VALUES (?,?,MD5(?),'OWNER');",
                             timeout : 30000, // 30s
@@ -257,7 +262,7 @@ router.post('/owner', [
                                     timeout : 30000, // 30s
                                     values  : [data.name,data.size,data.iscommercial,data.ispublic,data.street,data.city,data.zip,data.propertytype,data.username,data.id]
                                 }, function (error, results, fields) {
-                                    res.redirect('/');
+                                    res.redirect('/owner/property/' + data.id + '/?destroy=true');
                                 });
                             }
                             else

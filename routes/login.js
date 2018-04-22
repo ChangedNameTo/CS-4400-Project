@@ -66,12 +66,8 @@ router.post('/', [
                 var userName = results[0].Username;
 
                 req.session.valid_login = true;
-
-                if( !req.session.user_type )
-                {
-                    req.session.user_type = type;
-                    req.session.user_name = userName;
-                }
+                req.session.user_type   = type;
+                req.session.user_name   = userName;
 
                 if(type == 'OWNER')
                 {

@@ -16,6 +16,37 @@ var connection = mysql.createConnection({
 
 /* GET owner page. */
 router.get('/', function(req, res, next) {
+    // Deletes all properties without any items
+    if(req.query.destroy)
+    {
+        connection.query({
+            sql     : "DELETE FROM Property WHERE ID NOT IN (SELECT DISTINCT PropertyID FROM Has);",
+            timeout : 30000 // 30s
+        }, function (error, results, fields) {
+            connection.query({
+                sql     : "SELECT ID,Name,Size,IsCommercial,IsPublic,Street,City,Zip,PropertyType,ApprovedBy,AVG(Rating) AS Rating FROM Property p LEFT JOIN Visit v on p.ID = v.PropertyID WHERE Owner = ? GROUP BY p.ID ORDER BY p.ID;",
+                timeout : 30000, // 30s
+                values  : [req.session.user_name]
+            }, function (error, results, fields) {
+                res.render('owner', {
+                    results : results
+                });
+            });
+        });
+    }
+    else
+    {
+        connection.query({
+            sql     : "SELECT ID,Name,Size,IsCommercial,IsPublic,Street,City,Zip,PropertyType,ApprovedBy,AVG(Rating) AS Rating FROM Property p LEFT JOIN Visit v on p.ID = v.PropertyID WHERE Owner = ? GROUP BY p.ID ORDER BY p.ID;",
+            timeout : 30000, // 30s
+            values  : [req.session.user_name]
+        }, function (error, results, fields) {
+            res.render('owner', {
+                results : results
+            });
+        });
+    }
+
     connection.query({
         sql     : "SELECT ID,Name,Size,IsCommercial,IsPublic,Street,City,Zip,PropertyType,ApprovedBy,AVG(Rating) AS Rating FROM Property p LEFT JOIN Visit v on p.ID = v.PropertyID WHERE Owner = ? GROUP BY p.ID ORDER BY p.ID;",
         timeout : 30000, // 30s
@@ -161,8 +192,9 @@ router.get('/property/:id', function(req, res, next) {
 
                 // Render the page
                 res.render('owner/property', {
-                    result : property_result,
-                    has    : better_has
+                    destroy : req.query.destroy,
+                    result  : property_result,
+                    has     : better_has
                 });
             });
         });
@@ -421,7 +453,7 @@ router.post('/new_property/', [
             timeout : 30000, // 30s
             values  : [fields.name,fields.size,fields.iscommercial,fields.ispublic,fields.street,fields.city,fields.zip,fields.propertytype,req.session.user_name,fields.id]
         }, function (error, results, fields) {
-            res.redirect('/owner/property/' + req.body.id);
+            res.redirect('/owner/property/' + req.body.id + '/?destroy=true');
         });
     }
 });
