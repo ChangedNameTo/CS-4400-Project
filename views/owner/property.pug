@@ -1,0 +1,271 @@
+extends ../layout
+
+block content
+    div(
+        class = "ui container segment"
+    )
+        h1(
+            class = "ui centered header"
+        ) Manage #{result.Name}
+
+        form(
+            class  = 'ui form error',
+            action = '/owner/property/' + result.ID,
+            method = 'post'
+        )
+            if errors
+                div(
+                    id    = 'error_explanation',
+                    class = "ui error message"
+                )
+                    h3(
+                        class = 'ui left aligned header'
+                    )| These errors prevented this record from being updated:
+                    ul
+                        each error in errors
+                            li() #{error.msg}
+            h3(
+                class = "ui dividing header"
+            ) Basic Information
+            div(
+                class = 'fields'
+            )
+                div(
+                    class = 'required eight wide field'
+                )
+                    label(
+                        for = 'name'
+                    )| Name:
+                    input(
+                        type  = 'text',
+                        name  = 'name',
+                        id    = 'name',
+                        value = result.Name
+                    )
+                div(
+                    class = 'required eight wide field'
+                )
+                    label(
+                        for = 'Address'
+                    )| Address:
+                    input(
+                        type  = 'text',
+                        name  = 'street',
+                        id    = 'street',
+                        value = result.Street
+                    )
+            div(
+                class = 'fields'
+            )
+                div(
+                    class = 'required six wide field'
+                )
+                    label(
+                        for = 'city'
+                    )| City:
+                    input(
+                        type  = 'text',
+                        name  = 'city',
+                        id    = 'city',
+                        value = result.City
+                    )
+                div(
+                    class = 'required six wide field'
+                )
+                    label(
+                        for = 'zip'
+                    )| Zip:
+                    input(
+                        type  = 'text',
+                        name  = 'zip',
+                        id    = 'zip',
+                        value = result.Zip
+                    )
+                div(
+                    class = 'required four wide field'
+                )
+                    label(
+                        for = 'size'
+                    )| Size:
+                    input(
+                        type  = 'text',
+                        name  = 'size',
+                        id    = 'size',
+                        value = result.Size
+                    )
+            h3(
+                class = "ui dividing header"
+            ) Classifying Information
+            div(
+                class = 'fields'
+            )
+                div(
+                    class = 'required eight wide inline field'
+                )
+                    div(
+                        class = 'ui toggle checkbox'
+                    )
+                        if result.IsCommercial
+                            input(
+                                type    = 'checkbox',
+                                name    = 'iscommercial',
+                                checked = 'checked'
+                            )
+                        else
+                            input(
+                                name    = 'iscommercial',
+                                type    = 'checkbox'
+                            )
+                        label(
+                            for = 'IsCommercial'
+                        )| Is Commercial?
+                div(
+                    class = 'required eight wide inline field'
+                )
+                    div(
+                        class = 'ui toggle checkbox'
+                    )
+                        if result.IsPublic
+                            input(
+                                type    = 'checkbox',
+                                name    = 'ispublic',
+                                checked = 'checked'
+                            )
+                        else
+                            input(
+                                name    = 'ispublic',
+                                type    = 'checkbox'
+                            )
+                        label(
+                            for = 'IsPublic'
+                        )| Is Public?
+            div(
+                class = 'fields'
+            )
+                div(
+                    class = 'required eight wide field'
+                )
+                    label(
+                        for = 'id'
+                    )| ID:
+                    input(
+                        type        = 'text',
+                        name        = 'id',
+                        id          = 'id',
+                        placeholder = result.ID,
+                        readonly    = ''
+                    )
+                div(
+                    class = 'required eight wide field'
+                )
+                    label(
+                        for = 'propertytype'
+                    )| Type:
+                    input(
+                        type        = 'text',
+                        name        = 'type',
+                        id          = 'type',
+                        placeholder = result.PropertyType,
+                        readonly    = ''
+                    )
+            div(
+                class = 'row'
+            )
+                div(
+                    class = 'eight wide column'
+                )
+                    input(
+                        type              = 'submit',
+                        name              = 'commit',
+                        value             = 'Submit (Save Changes)',
+                        class             = 'ui primary fluid button',
+                        data-disable-with = 'Submit'
+                    )
+        h3(
+            class = 'ui dividing header'
+        ) Property has
+        div(
+            class = 'ui grid'
+        )
+            each val,index in has
+                if val
+                    div(
+                        class = 'row'
+                    )
+                        div(
+                            class = 'sixteen wide column'
+                        )
+                            h4(
+                                class = 'ui center aligned header'
+                            ) #{index}
+                            table(
+                                class = 'ui celled striped table'
+                            )
+                                tr()
+                                    th(
+                                        align = 'center'
+                                    ) #{index}
+                                    th(
+                                        align = 'center'
+                                    ) Action
+                                if val.have != null
+                                    each value in val.have
+                                        tr()
+                                            td(
+                                                align = 'center'
+                                            ) #{value.Name}
+                                            td(
+                                                align = 'center'
+                                            )
+                                                a(
+                                                    class   = 'ui fluid red button',
+                                                    href    = '/owner/has/delete/' + value.Name + '-' + value.PropertyID
+                                                    onclick = "return confirm('Are you sure? Form changes will not be saved')"
+                                                ) Delete
+                                else
+                                    tr()
+                                        td(
+                                            colspan = '2',
+                                            align   = 'center'
+                                        ) No Animals
+
+                            if val.not != null
+                                div(
+                                    class = 'ui grid'
+                                )
+                                    div(
+                                        class = 'row'
+                                    )
+                                        div(
+                                            class = 'sixteen wide column'
+                                        )
+                                            form(
+                                                class = 'ui form error',
+                                                action = '/owner/property/has/' + result.ID,
+                                                method = 'post'
+                                            )
+                                                div(
+                                                    class = 'fields'
+                                                )
+                                                    select(
+                                                        class = 'ui dropdown',
+                                                        name = 'name'
+                                                    )
+                                                        option(
+                                                            value = ''
+                                                        ) Add new #{index}
+                                                        each not_item in val.not
+                                                            option(
+                                                                value = not_item.Name
+                                                            ) #{not_item.Name}
+                                                input(
+                                                    type              = 'submit',
+                                                    value             = 'Save new ' + index,
+                                                    class             = 'ui primary fluid button',
+                                                    data-disable-with = 'Submit'
+                                                )
+        br()
+        a(
+            class = 'ui green fluid button',
+            href  = '/admin/'
+        )| Back (Changes will not be saved)
