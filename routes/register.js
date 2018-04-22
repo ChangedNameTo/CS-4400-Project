@@ -106,6 +106,11 @@ router.post('/visitor', [
                         }, function (error, results, fields) {
                             if(!error)
                             {
+                                // Set the user session
+                                req.session.valid_login = true;
+                                req.session.user_type   = 'VISITOR';
+                                req.session.user_name   = data.username;
+
                                 res.render('login', {});
                             }
                             else
@@ -197,7 +202,7 @@ router.post('/owner', [
                     value : ''
                 }
 
-                res.render('register/visitor', {
+                res.render('register/owner', {
                     errors : [custom_error]
                 });
             }
@@ -217,7 +222,7 @@ router.post('/owner', [
                             value : ''
                         }
 
-                        res.render('register/visitor', {
+                        res.render('register/owner', {
                             errors : [custom_error]
                         });
                     }
