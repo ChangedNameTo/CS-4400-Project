@@ -1,4 +1,4 @@
-extends layout
+extends ../layout
 
 block content
     div(
@@ -105,19 +105,9 @@ block content
                     )
                         a(
                             class = 'ui primary fluid button',
-                            href  = "/owner/property/" + result.ID
-                        ) Manage
-        a(
-            class = "ui green fluid button",
-            href  = "/owner/add_property"
-        ) Add Property
-        br()
-        a(
-            class = "ui blue fluid button",
-            href  = "/owner/other_properties"
-        ) Other Properties
-        br()
+                            href  = "/owner/other_property/" + result.ID
+                        ) Show
         a(
             class = "ui red fluid button",
-            href  = "/logout"
-        ) Log Out
+            href  = "/owner"
+        ) Back

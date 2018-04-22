@@ -14,7 +14,7 @@ var connection = mysql.createConnection({
     database : 'cs4400'
 });
 
-/* GET visitor page. */
+/* GET owner page. */
 router.get('/', function(req, res, next) {
     connection.query({
         sql     : "SELECT ID,Name,Size,IsCommercial,IsPublic,Street,City,Zip,PropertyType,ApprovedBy,AVG(Rating) AS Rating FROM Property p JOIN Visit v on p.ID = v.PropertyID WHERE Owner = ? GROUP BY p.ID ORDER BY p.ID;",
@@ -23,6 +23,20 @@ router.get('/', function(req, res, next) {
     }, function (error, results, fields) {
         console.log(results);
         res.render('owner', {
+            results : results
+        });
+    });
+});
+
+/* GET other owners page. */
+router.get('/other_properties', function(req, res, next) {
+    connection.query({
+        sql     : "SELECT ID,Name,Size,IsCommercial,IsPublic,Street,City,Zip,PropertyType,ApprovedBy,AVG(Rating) AS Rating FROM Property p JOIN Visit v on p.ID = v.PropertyID WHERE Owner != ? GROUP BY p.ID ORDER BY p.ID;",
+        timeout : 30000, // 30s
+        values  : [req.session.user_name]
+    }, function (error, results, fields) {
+        console.log(results);
+        res.render('owner/other_properties', {
             results : results
         });
     });
