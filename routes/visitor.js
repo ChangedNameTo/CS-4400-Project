@@ -30,7 +30,6 @@ router.get('/', function(req, res, next) {
             properties[item.ID]            = item;
             properties[item.ID].VisitCount = 0;
         });
-        console.log(properties);
 
         connection.query({
             sql     : "SELECT PropertyID,COUNT(PropertyID) AS VisitCount FROM Visit WHERE Username = ? AND PropertyID IN (?) GROUP BY PropertyID;",
@@ -45,7 +44,6 @@ router.get('/', function(req, res, next) {
                 }
             });
 
-            console.log(properties);
             res.render('visitor', {
                 results : properties
             });
@@ -180,6 +178,34 @@ router.get('/property/:id', function(req, res, next) {
             });
         });
     });
+});
+
+/* Add new visit */
+router.post('/property/new_visit/:id', [
+    check('rating')
+        .isLength({min:1})
+        .trim()
+], (req, res) => {
+    // Checks for the existance of errors
+    const errors = validationResult(req);
+    if(!errors.isEmpty())
+    {
+        // FIX ME IF YOU HAVE TIME
+        console.log(errors);
+    }
+    else
+    {
+        var property_id = req.params.id;
+
+        // Insert the new item
+        connection.query({
+            sql     : "INSERT INTO Visit (Username,PropertyID,Rating) VALUES (?,?,?);",
+            timeout : 30000, // 30s
+            values  : [req.session.user_name,property_id,req.body.rating]
+        }, function (error, results, fields) {
+            res.redirect('/visitor/');
+        });
+    }
 });
 
 module.exports = router;
