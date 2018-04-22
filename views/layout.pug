@@ -21,10 +21,27 @@ html
         div(
             class = 'ui container'
         )
-            a(
-                href  = '/',
-                class = 'item'
-            ) Home
+            if session.user_type != null
+                if session.user_type == 'VISITOR'
+                    a(
+                        href  = '/visitor',
+                        class = 'item'
+                    ) Home
+                if session.user_type == 'OWNER'
+                    a(
+                        href  = '/owner',
+                        class = 'item'
+                    ) Home
+                if session.user_type == 'ADMIN'
+                    a(
+                        href  = '/admin',
+                        class = 'item'
+                    ) Home
+            else
+                a(
+                    href  = '/',
+                    class = 'item'
+                ) Home
         div(
             class = 'right menu'
         )
