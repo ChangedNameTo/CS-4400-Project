@@ -1,0 +1,158 @@
+extends ../layout
+
+block content
+    div(
+        class = "ui container segment"
+    )
+        h1(
+            class = "ui centered header"
+        ) #{result.Name}
+
+        h3(
+            class = "ui dividing header"
+        ) Basic Information
+        div(
+            class = "ui interally celled grid"
+        )
+            div(
+                class = "row"
+            )
+                div(
+                    class = 'eight wide column'
+                )
+                    strong()| Name:
+                    |  #{result.Name}
+                div.
+                div(
+                    class = 'eight wide column'
+                )
+                    strong()| Address:
+                    |  #{result.Street}
+                div.
+
+            div(
+                class = "row"
+            )
+                div(
+                    class = 'six wide column'
+                )
+                    strong()| City:
+                    |  #{result.City}
+                div.
+                div(
+                    class = 'six wide column'
+                )
+                    strong()| Zip:
+                    |  #{result.Zip}
+                div.
+                div(
+                    class = 'four wide column'
+                )
+                    strong()| Size:
+                    |  #{result.Size}
+                div.
+        h3(
+            class = "ui dividing header"
+        ) Classifying Information
+        div(
+            class = "ui interally celled grid"
+        )
+            div(
+                class = 'row'
+            )
+                div(
+                    class = 'eight wide column'
+                )
+                    div(
+                        class = 'ui toggle checkbox'
+                    )
+                        if result.IsCommercial
+                            input(
+                                type     = 'checkbox',
+                                name     = 'iscommercial',
+                                checked  = 'checked',
+                                disabled = 'disabled'
+                            )
+                        else
+                            input(
+                                name     = 'iscommercial',
+                                type     = 'checkbox',
+                                disabled = 'disabled'
+                            )
+                        label()| Is Commercial?
+                    div.
+                div(
+                    class = 'eight wide column'
+                )
+                    div(
+                        class = 'ui toggle checkbox'
+                    )
+                        if result.IsPublic
+                            input(
+                                type     = 'checkbox',
+                                name     = 'ispublic',
+                                checked  = 'checked',
+                                disabled = 'disabled'
+                            )
+                        else
+                            input(
+                                name     = 'ispublic',
+                                type     = 'checkbox',
+                                disabled = 'disabled'
+                            )
+                        label()| Is Public?
+                    div.
+            div(
+                class = 'row'
+            )
+                div(
+                    class = 'eight wide column'
+                )
+                    strong()| ID:
+                    |  #{result.ID}
+                div.
+                div(
+                    class = 'eight wide column'
+                )
+                    strong()| Type:
+                    |  #{result.PropertyType}
+                div.
+
+        h3(
+            class = 'ui dividing header'
+        ) Property has
+        div(
+            class = 'ui grid'
+        )
+            each val,index in has
+                if val
+                    div(
+                        class = 'row'
+                    )
+                        div(
+                            class = 'sixteen wide column'
+                        )
+                            table(
+                                class = 'ui celled striped table'
+                            )
+                                tr()
+                                    th(
+                                        align = 'center'
+                                    ) #{index}
+                                if val.have != null
+                                    each value in val.have
+                                        tr()
+                                            td(
+                                                align = 'center'
+                                            ) #{value.Name}
+                                else
+                                    tr()
+                                        td(
+                                            colspan = '2',
+                                            align   = 'center'
+                                        ) No #{index}
+        br()
+        a(
+            class = 'ui green fluid button',
+            href  = '/owner/other_properties'
+        )| Back
