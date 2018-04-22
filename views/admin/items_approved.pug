@@ -1,0 +1,82 @@
+extends ../layout
+
+block content
+    div(
+        class = "ui container segment"
+    )
+        h1(
+            class = "ui centered header"
+        ) Approved Crops and Animals
+        table(
+            class = "ui celled striped sortable table",
+            id    = "table"
+        )
+            tr(
+                data-sort-method = 'none'
+            )
+                th(
+                    align = "center"
+                ) Name
+                th(
+                    align = "center"
+                ) Email
+                th(
+                    align = "center"
+                ) Actions
+            each result in approved
+                tr()
+                    td(
+                        style = "text-align:center;"
+                    ) #{result.Name}
+                    td(
+                        style = "text-align:center;"
+                    ) #{result.Type}
+                    td(
+                        style = "text-align:center;"
+                    )
+                        form(
+                            action = '/admin/items_approved',
+                            class  = 'ui form error',
+                            method = 'post'
+                        )
+                            input(
+                                type  = 'hidden',
+                                name  = 'username',
+                                value = result.Name
+                            )
+                            input(
+                                type    = 'submit',
+                                value   = 'Delete Farm Item',
+                                class   = 'ui red button',
+                                onclick = "return confirm('Are you sure? This will delete the item.')"
+                            )
+        form(
+            class  = 'ui form error',
+            action = '/admin/items_approved/approve',
+            method = 'post'
+        )
+            div(
+                class = 'fields'
+            )
+                select(
+                    class = 'ui dropdown',
+                    name = 'name'
+                )
+                    option(
+                        value = ''
+                    ) Approve New Farm Item
+                        each item in unapproved
+                            option(
+                                value = item.Name
+                            ) #{item.Name}
+            input(
+                type              = 'submit',
+                value             = 'Save new ' + index,
+                class             = 'ui primary fluid button',
+                data-disable-with = 'Submit'
+            )
+        br()
+        a(
+            class = "ui red fluid button",
+            href  = "/admin"
+        ) Back
