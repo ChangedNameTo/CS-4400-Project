@@ -55,7 +55,6 @@ var connection = mysql.createConnection({
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
     console.log(req);
-    console.log(res);
     next(createError(404));
 });
 

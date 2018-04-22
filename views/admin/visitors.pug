@@ -1,0 +1,78 @@
+extends ../layout
+
+block content
+    div(
+        class = "ui container segment"
+    )
+        h1(
+            class = "ui centered header"
+        ) Visitor List
+        table(
+            class = "ui celled striped sortable table",
+            id    = "table"
+        )
+            tr(
+                data-sort-method = 'none'
+            )
+                th(
+                    align = "center"
+                ) Name
+                th(
+                    align = "center"
+                ) Email
+                th(
+                    align = "center"
+                ) Logged Visits
+                th(
+                    align = "center"
+                ) Actions
+            each result in results
+                tr()
+                    td(
+                        style = "text-align:center;"
+                    ) #{result.Username}
+                    td(
+                        style = "text-align:center;"
+                    ) #{result.Email}
+                    td(
+                        style = "text-align:center;"
+                    ) #{result.VNumber}
+                    td(
+                        style = "text-align:center;"
+                    )
+                        form(
+                            action = '/admin/visitor/delete_user',
+                            class  = 'ui form error',
+                            method = 'post'
+                        )
+                            input(
+                                type  = 'hidden',
+                                name  = 'username',
+                                value = result.Username
+                            )
+                            input(
+                                type    = 'submit',
+                                value   = 'Delete Visitor Account',
+                                class   = 'ui red button',
+                                onclick = "return confirm('Are you sure? This will delete the visitor.')"
+                            )
+                        br()
+                        form(
+                            action = '/admin/visitor/delete_log',
+                            method = 'post'
+                        )
+                            input(
+                                type  = 'hidden',
+                                name  = 'username',
+                                value = result.Username
+                            )
+                            input(
+                                type    = 'submit',
+                                value   = 'Delete Visitor Visit Log',
+                                class   = 'ui red button',
+                                onclick = "return confirm('Are you sure? This will delete the visit log.')"
+                            )
+        a(
+            class = "ui red fluid button",
+            href  = "/admin"
+        ) Back
