@@ -10,13 +10,14 @@ var session   = require('express-session');
 var FileStore = require('session-file-store')(session);
 
 
-var indexRouter   = require('./routes/index');
-var usersRouter   = require('./routes/users');
-var loginRouter   = require('./routes/login');
-var adminRouter   = require('./routes/admin');
-var ownerRouter   = require('./routes/owner');
-var visitorRouter = require('./routes/visitor');
-var logoutRouter  = require('./routes/logout');
+var indexRouter    = require('./routes/index');
+var usersRouter    = require('./routes/users');
+var loginRouter    = require('./routes/login');
+var adminRouter    = require('./routes/admin');
+var ownerRouter    = require('./routes/owner');
+var logoutRouter   = require('./routes/logout');
+var visitorRouter  = require('./routes/visitor');
+var registerRouter = require('./routes/register');
 
 var app = express();
 
@@ -47,13 +48,14 @@ app.use(function(req, res, next) {
 });
 
 // route setup
-app.use('/',        indexRouter);
-app.use('/users',   usersRouter);
-app.use('/login',   loginRouter);
-app.use('/admin',   adminRouter);
-app.use('/owner',   ownerRouter);
-app.use('/logout',  logoutRouter);
-app.use('/visitor', visitorRouter);
+app.use('/',         indexRouter);
+app.use('/users',    usersRouter);
+app.use('/login',    loginRouter);
+app.use('/admin',    adminRouter);
+app.use('/owner',    ownerRouter);
+app.use('/logout',   logoutRouter);
+app.use('/visitor',  visitorRouter);
+app.use('/register', registerRouter);
 
 // database setup
 var mysql = require('mysql');

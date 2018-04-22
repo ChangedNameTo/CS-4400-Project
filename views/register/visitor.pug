@@ -1,0 +1,99 @@
+extends ../layout
+
+block content
+    div(
+        class = "ui container segment"
+    )
+        h1(
+            class = "ui centered header"
+        ) New Visitor Registration
+
+        form(
+            class  = 'ui form error',
+            action = '/register/visitor/',
+            method = 'post'
+        )
+            if errors
+                div(
+                    id    = 'error_explanation',
+                    class = "ui error message"
+                )
+                    h3(
+                        class = 'ui left aligned header'
+                    )| These errors prevented this record from being updated:
+                    ul
+                        each error in errors
+                            li() #{error.msg}
+            div(
+                class = 'fields'
+            )
+                div(
+                    class = 'required eight wide field'
+                )
+                    label(
+                        for = 'email'
+                    )| Email:
+                    input(
+                        type  = 'text',
+                        name  = 'email',
+                        id    = 'email',
+                    )
+                div(
+                    class = 'required eight wide field'
+                )
+                    label(
+                        for = 'username'
+                    )| Username:
+                    input(
+                        type  = 'text',
+                        name  = 'username',
+                        id    = 'username',
+                    )
+            div(
+                class = 'fields'
+            )
+                div(
+                    class = 'required eight wide field'
+                )
+                    label(
+                        for = 'password'
+                    )| Password:
+                    input(
+                        type  = 'password',
+                        name  = 'password',
+                        id    = 'password',
+                    )
+                div(
+                    class = 'required eight wide field'
+                )
+                    label(
+                        for = 'confirm'
+                    )| Confirm Password:
+                    input(
+                        type  = 'password',
+                        name  = 'confirm',
+                        id    = 'confirm',
+                    )
+            div(
+                class = 'ui grid'
+            )
+                div(
+                    class = 'row'
+                )
+                    div(
+                        class = 'eight wide column'
+                    )
+                        input(
+                            type              = 'submit',
+                            name              = 'commit',
+                            value             = 'Submit (Save Changes)',
+                            class             = 'ui primary fluid button',
+                            data-disable-with = 'Submit'
+                        )
+                    div(
+                        class = 'eight wide column'
+                    )
+                        a(
+                            class = 'ui red fluid button',
+                            href  = '/'
+                        )| Back (Changes will not be saved)

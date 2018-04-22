@@ -3,13 +3,33 @@ extends layout
 block content
     div(class="ui container segment")
         h1(
-            class="ui center aligned header"
-        )='You are not logged in.'
+            class = "ui center aligned header"
+        ) You are not logged in.
         h3(
-            class="ui center aligned header"
-        )='Please sign in to continue'
+                class="ui center aligned header"
+        ) Please sign in to continue
         a(
-            href='/login',
-            class='ui fluid primary button'
-        )='Login Here'
-
+            href  = '/login',
+            class = 'ui fluid primary button'
+        ) Login Here
+        br()
+        div(
+            class = 'ui grid'
+        )
+            div(
+                class = 'row'
+            )
+                div(
+                    class = 'eight wide column'
+                )
+                    a(
+                        href  = '/register/visitor',
+                        class = 'ui fluid primary button'
+                    ) New Visitor Registration
+                div(
+                    class = 'eight wide column'
+                )
+                    a(
+                        href  = '/register/owner',
+                        class = 'ui fluid primary button'
+                    ) New Owner Registration
