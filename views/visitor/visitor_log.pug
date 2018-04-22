@@ -1,0 +1,62 @@
+extends ../layout
+
+block content
+    div(
+        class = "ui container segment"
+    )
+        h1(
+            class = "ui centered header"
+        ) All Public, Confirmed Properties
+        table(
+            class = "ui celled striped sortable table",
+            id    = "table"
+        )
+            tr(
+                data-sort-method = 'none'
+            )
+                th(
+                    align = "center"
+                ) Name
+                th(
+                    align = "center"
+                ) Address
+                th(
+                    align = "center"
+                ) Rating
+                th(
+                    align = "center"
+                ) Actions
+            each result in results
+                tr()
+                    td(
+                        style = "text-align:center;"
+                    ) #{result.Name}
+                    td(
+                        style = "text-align:center;"
+                    ) #{result.VisitDate}
+                    td(
+                        style = "text-align:center;"
+                    ) #{result.Rating}
+                    td(
+                        style = "text-align:center;"
+                    )
+                        form(
+                            action = '/visitor/delete_visit',
+                            class  = 'ui form error',
+                            method = 'post'
+                        )
+                            input(
+                                type  = 'hidden',
+                                name  = 'propertyid',
+                                value = result.PropertyID
+                            )
+                            input(
+                                type    = 'submit',
+                                value   = 'Delete Visit',
+                                class   = 'ui red button',
+                                onclick = "return confirm('Are you sure? This will delete the visit.')"
+                            )
+        a(
+            class = "ui red fluid button",
+            href = "/visitor/"
+        ) Back

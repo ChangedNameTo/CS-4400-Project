@@ -14,7 +14,7 @@ var connection = mysql.createConnection({
     database : 'cs4400'
 });
 
-/* GET admin page. */
+/* GET visitor page. */
 router.get('/', function(req, res, next) {
     var properties   = {};
     var property_ids = [];
@@ -180,6 +180,19 @@ router.get('/property/:id', function(req, res, next) {
     });
 });
 
+/* GET visitor page. */
+router.get('/visitor_log', function(req, res, next) {
+    connection.query({
+        sql     : "SELECT p.Name,v.PropertyID,v.VisitDate,v.Rating FROM Visit v JOIN Property p ON v.PropertyID = p.ID WHERE Username = ?;",
+        timeout : 30000, // 30s
+        values  : [req.session.user_name]
+    }, function (error, results, fields) {
+        res.render('visitor/visitor_log', {
+            results : results
+        });
+    });
+});
+
 /* Add new visit */
 router.post('/property/new_visit/:id', [
     check('rating')
@@ -204,6 +217,30 @@ router.post('/property/new_visit/:id', [
             values  : [req.session.user_name,property_id,req.body.rating]
         }, function (error, results, fields) {
             res.redirect('/visitor/');
+        });
+    }
+});
+
+/* Delete visit */
+router.post('/delete_visit/', [], (req, res) => {
+    // Checks for the existance of errors
+    const errors = validationResult(req);
+    if(!errors.isEmpty())
+    {
+        // FIX ME IF YOU HAVE TIME
+        console.log(errors);
+    }
+    else
+    {
+        var property_id = req.body.propertyid;
+
+        // Insert the new item
+        connection.query({
+            sql     : "DELETE FROM Visit WHERE Username = ? AND PropertyID = ?;",
+            timeout : 30000, // 30s
+            values  : [req.session.user_name,property_id]
+        }, function (error, results, fields) {
+            res.redirect('/visitor/visitor_log');
         });
     }
 });
