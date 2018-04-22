@@ -37,6 +37,12 @@ app.use(session({
     saveUninitialized : true
 }));
 
+// expose the session to the locals for templating
+app.use(function(req, res, next) {
+    res.locals.session = req.session;
+    next();
+});
+
 // route setup
 app.use('/', indexRouter);
 app.use('/users', usersRouter);

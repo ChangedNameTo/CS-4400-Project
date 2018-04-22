@@ -18,8 +18,22 @@ html
             src="/tablesort/dist/tablesort.min.js"
         )
     div(class='ui stackable menu')
-        div(class='ui container')
-            a(href='/', class='item') Home
+        div(
+            class = 'ui container'
+        )
+            a(
+                href  = '/',
+                class = 'item'
+            ) Home
+        div(
+            class = 'right menu'
+        )
+            div(
+                class = 'item'
+                ) #{session.user_type}
+            div(
+                class = 'item'
+                ) #{session.user_name}
     section(
         style = "padding : 30px  0px; min-height: 87%;",
         id    = "main"

@@ -16,6 +16,7 @@ var connection = mysql.createConnection({
 
 /* GET admin page. */
 router.get('/', function(req, res, next) {
+    console.log(res.locals);
     res.render('admin', {});
 });
 
