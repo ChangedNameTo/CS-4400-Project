@@ -37,10 +37,16 @@ html
                             class = 'item'
                         ) Home
                 if session.user_type == 'ADMIN'
-                    a(
-                        href  = '/admin',
-                        class = 'item'
-                    ) Home
+                    if destroy
+                        a(
+                            href  = '/admin/?destroy=true',
+                            class = 'item'
+                        ) Home
+                    else
+                        a(
+                            href  = '/admin',
+                            class = 'item'
+                        ) Home
             else
                 a(
                     href  = '/',

@@ -665,7 +665,14 @@ router.post('/property/:id',[
             timeout : 30000, // 30s
             values  : [fields.name, fields.size, fields.iscommercial, fields.ispublic, fields.street, fields.city, fields.zip, fields.id]
         }, function (error, results, fields) {
-            res.redirect('/owner/property/' + req.params.id);
+            // Update the property
+            connection.query({
+                sql     : "DELETE FROM Visit WHERE PropertyID = ?;",
+                timeout : 30000, // 30s
+                values  : [fields.name, fields.size, fields.iscommercial, fields.ispublic, fields.street, fields.city, fields.zip, fields.id]
+            }, function (error, results, fields) {
+                res.redirect('/owner/property/' + req.params.id);
+            });
         });
     }
 });
