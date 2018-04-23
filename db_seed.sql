@@ -1,3 +1,9 @@
+DROP TABLE IF EXISTS Has;
+DROP TABLE IF EXISTS FarmItem;
+DROP TABLE IF EXISTS Visit;
+DROP TABLE IF EXISTS Property;
+DROP TABLE IF EXISTS User;
+
 CREATE TABLE User(
 	Username varchar(50),
 	Email varchar(50) NOT NULL,
@@ -8,7 +14,7 @@ CREATE TABLE User(
 );
 
 CREATE TABLE Property(
-	ID int CHECK (ID < 100000),
+	ID int NOT NULL CHECK (ID < 100000),
 	Name varchar(255) NOT NULL,
 	Size float NOT NULL,
 	IsCommercial boolean NOT NULL,

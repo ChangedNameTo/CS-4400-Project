@@ -1,6 +1,8 @@
 var express = require('express');
 var router  = express.Router();
 
+const util = require('util');
+
 const check            = require('express-validator/check').check;
 const validationResult = require('express-validator/check').validationResult;
 
@@ -46,16 +48,6 @@ router.get('/', function(req, res, next) {
             });
         });
     }
-
-    connection.query({
-        sql     : "SELECT ID,Name,Size,IsCommercial,IsPublic,Street,City,Zip,PropertyType,ApprovedBy,AVG(Rating) AS Rating FROM Property p LEFT JOIN Visit v on p.ID = v.PropertyID WHERE Owner = ? GROUP BY p.ID ORDER BY p.ID;",
-        timeout : 30000, // 30s
-        values  : [req.session.user_name]
-    }, function (error, results, fields) {
-        res.render('owner', {
-            results : results
-        });
-    });
 });
 
 /* GET other owners page. */
@@ -66,7 +58,8 @@ router.get('/other_properties', function(req, res, next) {
         values  : [req.session.user_name]
     }, function (error, results, fields) {
         res.render('owner/other_properties', {
-            results : results
+            results : results,
+			search  : util.inspect(results, {showHidden : true, depth : null, breakLength : Infinity})
         });
     });
 });

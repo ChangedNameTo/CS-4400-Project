@@ -92,9 +92,14 @@ block content
                     td(
                         style = "text-align:center;"
                     ) #{result.ApprovedBy}
-                    td(
-                        style = "text-align:center;"
-                    ) #{result.Rating}
+                    if result.Rating
+                        td(
+                            style = "text-align:center;"
+                        ) #{result.Rating}
+                    else
+                        td(
+                            style = "text-align:center;"
+                        ) Not yet rated
                     td(
                         style = "text-align:center;"
                     )

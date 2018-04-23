@@ -107,7 +107,32 @@ block content
                             class = 'ui primary fluid button',
                             href  = "/owner/other_property/" + result.ID
                         ) Show
+        div(
+            class = 'ui search'
+        )
+            div(
+                class = 'ui icon input'
+            )
+                input(
+                    class      = 'prompt',
+                    type       = 'text',
+                    placehoder = 'Search properties...'
+                )
+                i(
+                    class = 'search icon'
+                )
+            div(
+                class = 'results'
+            )
+        br()
         a(
             class = "ui red fluid button",
             href  = "/owner"
         ) Back
+        script.
+            var search_arr = [];
+        each result in results
+            script.
+                console.log(#{result});
+        script.
+            $('.ui.search').search({source:#{result}, searchFields:[],searchFullText:false });

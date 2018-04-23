@@ -64,7 +64,7 @@ router.post('/visitor', [
             timeout : 30000, // 30s
             values  : [data.username]
         }, function (error, results, fields) {
-            if(results == null || results == [] || results == undefined)
+            if(results != [])
             {
                 // We need a custom error for failing validation
                 var custom_error = {
@@ -85,7 +85,7 @@ router.post('/visitor', [
                     values  : [data.email]
                 }, function (error, results, fields) {
                     // We need a custom error for failing validation
-                    if(results == null || results == [] || results == undefined)
+                    if(results != [])
                     {
                         var custom_error = {
                             param : 'username',
@@ -193,7 +193,7 @@ router.post('/owner', [
             timeout : 30000, // 30s
             values  : [data.username]
         }, function (error, results, fields) {
-            if(results == null || results == [] || results == undefined)
+            if(result != [])
             {
                 // We need a custom error for failing validation
                 var custom_error = {
@@ -214,7 +214,7 @@ router.post('/owner', [
                     values  : [data.email]
                 }, function (error, results, fields) {
                     // We need a custom error for failing validation
-                    if(results == null || results == [] || results == undefined)
+                    if(results != [])
                     {
                         var custom_error = {
                             param : 'username',
