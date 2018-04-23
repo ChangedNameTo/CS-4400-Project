@@ -400,10 +400,6 @@ router.post('/new_property/', [
         .isLength({min:1})
         .withMessage('Size is required.')
         .trim(),
-    check('id')
-        .isLength({min:1})
-        .withMessage('Size is required.')
-        .trim(),
     check('propertytype')
         .isLength({min:1})
         .withMessage('Property Type is required.')
@@ -419,34 +415,64 @@ router.post('/new_property/', [
     }
     else
     {
-        // Normallize IsPublic and IsCommercial
-        if(req.body.ispublic)
-        {
-            req.body.ispublic = 1;
-        }
-        else
-        {
-            req.body.ispublic = 0;
-        }
 
-        if(req.body.iscommercial)
-        {
-            req.body.iscommercial = 1;
-        }
-        else
-        {
-            req.body.iscommercial = 0;
-        }
-
-        var fields = req.body;
-
-        // Insert the new item
+        var data = req.body;
+        // Make a db connection, check for valid password
         connection.query({
-            sql     : "INSERT INTO Property (Name,Size,IsCommercial,IsPublic,Street,City,Zip,PropertyType,Owner,ID) VALUES (?,?,?,?,?,?,?,?,?,?);",
+            sql     : "SELECT * FROM Property WHERE Name = ?;",
             timeout : 30000, // 30s
-            values  : [fields.name,fields.size,fields.iscommercial,fields.ispublic,fields.street,fields.city,fields.zip,fields.propertytype,req.session.user_name,fields.id]
+            values  : [req.body.name]
         }, function (error, results, fields) {
-            res.redirect('/owner/property/' + req.body.id + '/?destroy=true');
+            if(results[0])
+            {
+                // We need a custom error for failing validation
+                var custom_error = {
+                    param : 'name',
+                    msg   : 'This name already exists!',
+                    value : ''
+                };
+
+                res.render('owner/add_property', {
+                    errors : [custom_error]
+                });
+            }
+            else
+            {
+                connection.query({
+                    sql     : "SELECT MAX(ID) + 1 AS id FROM Property;",
+                    timeout : 30000 // 30s
+                }, function (error, results, fields) {
+                    var id = results[0].id;
+
+                    // Normallize IsPublic and IsCommercial
+                    if(req.body.ispublic)
+                    {
+                        req.body.ispublic = 1;
+                    }
+                    else
+                    {
+                        req.body.ispublic = 0;
+                    }
+
+                    if(req.body.iscommercial)
+                    {
+                        req.body.iscommercial = 1;
+                    }
+                    else
+                    {
+                        req.body.iscommercial = 0;
+                    }
+
+                    // Insert the new item
+                    connection.query({
+                        sql     : "INSERT INTO Property (Name,Size,IsCommercial,IsPublic,Street,City,Zip,PropertyType,Owner,ID) VALUES (?,?,?,?,?,?,?,?,?,?);",
+                        timeout : 30000, // 30s
+                        values  : [data.name,data.size,data.iscommercial,data.ispublic,data.street,data.city,data.zip,data.propertytype,req.session.user_name,id]
+                    }, function (error, results, fields) {
+                        res.redirect('/owner/property/' + id + '/?destroy=true');
+                    });
+                });
+            }
         });
     }
 });
