@@ -97,9 +97,14 @@ block content
                         td(
                             style = "text-align:center;"
                         ) False
-                    td(
-                        style = "text-align:center;"
-                    ) #{result.Rating}
+                    if result.Rating
+                        td(
+                            style = "text-align:center;"
+                        ) #{result.Rating}
+                    else
+                        td(
+                            style = "text-align:center;"
+                        ) Not Applicable
                     td(
                         style = "text-align:center;"
                     )
@@ -108,7 +113,7 @@ block content
                             href  = "/owner/other_property/" + result.ID
                         ) Show
         div(
-            class = 'ui search'
+            class = 'ui fluid search'
         )
             div(
                 class = 'ui icon input'
@@ -130,9 +135,4 @@ block content
             href  = "/owner"
         ) Back
         script.
-            var search_arr = [];
-        each result in results
-            script.
-                console.log(#{result});
-        script.
-            $('.ui.search').search({source:#{result}, searchFields:[],searchFullText:false });
+            $('.ui.search').search({source:[#{search}], searchFields:['Name'],searchFullText:false,fields:{title:'Name',description:'',url:'ID'},minCharacters:3,onSelect(result,response){window.location.href = '/owner/other_property/'+result.ID}});

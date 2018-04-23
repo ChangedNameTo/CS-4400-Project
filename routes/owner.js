@@ -31,7 +31,8 @@ router.get('/', function(req, res, next) {
                 values  : [req.session.user_name]
             }, function (error, results, fields) {
                 res.render('owner', {
-                    results : results
+                    results : results,
+                    search  : util.inspect(JSON.parse(JSON.stringify(results[0])), {showHidden:true,depth:null,breakLength:Infinity})
                 });
             });
         });
@@ -44,7 +45,8 @@ router.get('/', function(req, res, next) {
             values  : [req.session.user_name]
         }, function (error, results, fields) {
             res.render('owner', {
-                results : results
+                results : results,
+                search  : util.inspect(JSON.parse(JSON.stringify(results[0])), {showHidden:true,depth:null,breakLength:Infinity})
             });
         });
     }
@@ -59,7 +61,7 @@ router.get('/other_properties', function(req, res, next) {
     }, function (error, results, fields) {
         res.render('owner/other_properties', {
             results : results,
-			search  : util.inspect(results, {showHidden : true, depth : null, breakLength : Infinity})
+			search  : util.inspect(JSON.parse(JSON.stringify(results[0])), {showHidden:true,depth:null,breakLength:Infinity})
         });
     });
 });

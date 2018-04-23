@@ -1,6 +1,8 @@
 var express = require('express');
 var router  = express.Router();
 
+const util = require('util');
+
 const check            = require('express-validator/check').check;
 const validationResult = require('express-validator/check').validationResult;
 
@@ -38,8 +40,11 @@ router.get('/confirmed', function(req, res, next) {
         sql     : "SELECT ID,Name,Size,IsCommercial,IsPublic,Street,City,Zip,PropertyType,ApprovedBy,AVG(Rating) AS Rating FROM Property p LEFT JOIN Visit v on p.ID = v.PropertyID GROUP BY p.ID ORDER BY p.ID;",
         timeout : 30000 // 30s
     }, function (error, results, fields) {
-        console.log(results);
-        res.render('admin/confirmed', {results : results});
+        console.log(util.inspect(JSON.parse(JSON.stringify(results)),{depth:null,breakLength:Infinity}));
+        res.render('admin/confirmed', {
+            results : results,
+            search  : util.inspect(JSON.parse(JSON.stringify(results)),{depth:null,breakLength:Infinity})
+        });
     });
 });
 
@@ -49,7 +54,10 @@ router.get('/unconfirmed', function(req, res, next) {
         sql     : "SELECT * FROM Property WHERE ApprovedBy IS null;",
         timeout : 30000 // 30s
     }, function (error, results, fields) {
-        res.render('admin/unconfirmed', {results : results});
+        res.render('admin/unconfirmed', {
+            results : results,
+            search  : util.inspect(JSON.parse(JSON.stringify(results)),{depth:null,breakLength:Infinity})
+        });
     });
 });
 

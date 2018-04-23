@@ -96,7 +96,27 @@ block content
                             class = 'ui primary fluid button',
                             href  = "/admin/property/" + result.ID
                         ) Manage
+        div(
+            class = 'ui fluid search'
+        )
+            div(
+                class = 'ui icon input'
+            )
+                input(
+                    class      = 'prompt',
+                    type       = 'text',
+                    placehoder = 'Search properties...'
+                )
+                i(
+                    class = 'search icon'
+                )
+            div(
+                class = 'results'
+            )
+        br()
         a(
             class = "ui red fluid button",
             href  = "/admin"
         ) Back
+        script.
+            $('.ui.search').search({source:#{search},searchFields:['Name'],searchFullText:false,fields:{title:'Name',description:''},minCharacters:3,onSelect(result,response){window.location.replace('/admin/property/'+result.ID)}});

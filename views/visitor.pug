@@ -102,6 +102,24 @@ block content
                             class = 'ui primary fluid button',
                             href  = "/visitor/property/" + result.ID
                         ) View
+        div(
+            class = 'ui fluid search'
+        )
+            div(
+                class = 'ui icon input'
+            )
+                input(
+                    class      = 'prompt',
+                    type       = 'text',
+                    placehoder = 'Search properties...'
+                )
+                i(
+                    class = 'search icon'
+                )
+            div(
+                class = 'results'
+            )
+        br()
         a(
             class = "ui green fluid button",
             href = "/visitor/visitor_log"
@@ -111,3 +129,5 @@ block content
             class = "ui red fluid button",
             href = "/logout"
         ) Log Out
+        script.
+            $('.ui.search').search({source:#{search},searchFields:['Name'],searchFullText:false,fields:{title:'Name',description:''},minCharacters:3,onSelect(result,response){window.location.replace('/visitor/property/'+result.ID)}});

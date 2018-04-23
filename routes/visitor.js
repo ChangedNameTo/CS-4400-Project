@@ -1,6 +1,8 @@
 var express = require('express');
 var router  = express.Router();
 
+const util = require('util');
+
 const check            = require('express-validator/check').check;
 const validationResult = require('express-validator/check').validationResult;
 
@@ -45,7 +47,8 @@ router.get('/', function(req, res, next) {
             });
 
             res.render('visitor', {
-                results : properties
+                results : properties,
+                search  : util.inspect(JSON.parse(JSON.stringify(properties)),{depth:null,breakLength:Infinity})
             });
         });
     });
