@@ -159,6 +159,17 @@ block content
             action = '/visitor/property/new_visit/' + result.ID,
             method = 'post'
         )
+            if errors
+                div(
+                    id    = 'error_explanation',
+                    class = "ui error message"
+                )
+                    h3(
+                        class = 'ui left aligned header'
+                    )| These errors prevented this record from being updated:
+                    ul
+                        each error in errors
+                            li() #{error.msg}
             div(
                 class = 'fields'
             )
