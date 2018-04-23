@@ -477,4 +477,197 @@ router.post('/new_property/', [
     }
 });
 
+router.post('/property/:id',[
+    check('name')
+        .isLength({min:1})
+        .withMessage('Name is required.')
+        .trim(),
+    check('street')
+        .isLength({min:1})
+        .withMessage('Street is required.')
+        .trim(),
+    check('city')
+        .isLength({min:1})
+        .withMessage('City is required.')
+        .trim(),
+    check('zip')
+        .isLength({min:1})
+        .withMessage('Zip is required.')
+        .trim(),
+    check('size')
+        .isLength({min:1})
+        .withMessage('Size is required.')
+        .trim()
+], (req, res) => {
+    // Checks for the existance of errors
+    const errors = validationResult(req);
+    if(!errors.isEmpty())
+    {
+        var property_result = {};
+
+        // Get property info
+        connection.query({
+            sql     : "SELECT * FROM Property WHERE ID LIKE ?;",
+            timeout : 30000, // 30s
+            values  : req.params.id
+        }, function (error, result, fields) {
+            // Only grabs one result
+            property_result = result[0];
+
+            var has = {};
+
+            // Get has
+            connection.query({
+                sql     : "SELECT Name, `IsApproved`, PropertyID, Type FROM `Has` h JOIN `FarmItem` f ON h.`ItemName` = f.Name WHERE h.`PropertyID` = ?;",
+                timeout : 30000, // 30s
+                values  : req.params.id
+            }, function (error, results, fields) {
+                has = results;
+
+                var dont_have = {};
+
+                // Get Don't haves
+                connection.query({
+                    sql     : "SELECT * FROM FarmItem WHERE Name NOT IN (SELECT Name FROM `Has` h JOIN `FarmItem` f ON h.`ItemName` = f.Name WHERE h.`PropertyID` = ?) AND IsApproved = 1;",
+                    timeout : 30000, // 30s
+                    values  : req.params.id
+                }, function (error, results, fields) {
+                    dont_have = results;
+
+                    var animals       = {};
+                    var fruits        = {};
+                    var vegetables    = {};
+                    var flowers       = {};
+                    var nuts          = {};
+
+                    animals['have']    = [];
+                    fruits['have']     = [];
+                    vegetables['have'] = [];
+                    flowers['have']    = [];
+                    nuts['have']       = [];
+
+                    animals['not']    = [];
+                    fruits['not']     = [];
+                    vegetables['not'] = [];
+                    flowers['not']    = [];
+                    nuts['not']       = [];
+
+                    // Parse results for have
+                    has.forEach(function(item){
+                        switch(item.Type)
+                        {
+                            case 'ANIMAL':
+                                animals['have'].push(item);
+                                break;
+                            case 'FRUIT':
+                                fruits['have'].push(item);
+                                break;
+                            case 'FLOWER':
+                                flowers['have'].push(item);
+                                break;
+                            case 'VEGETABLE':
+                                vegetables['have'].push(item);
+                                break;
+                            case 'NUT':
+                                nuts['have'].push(item);
+                                break;
+                        }
+                    });
+
+                    // Parse results for don't have
+                    dont_have.forEach(function(item){
+                        switch(item.Type)
+                        {
+                            case 'ANIMAL':
+                                animals['not'].push(item);
+                                break;
+                            case 'FRUIT':
+                                fruits['not'].push(item);
+                                break;
+                            case 'FLOWER':
+                                flowers['not'].push(item);
+                                break;
+                            case 'VEGETABLE':
+                                vegetables['not'].push(item);
+                                break;
+                            case 'NUT':
+                                nuts['not'].push(item);
+                                break;
+                        }
+                    });
+
+                    // Dump the arrays in to this map
+                    var better_has = {};
+                    better_has['Animals']    = animals;
+                    better_has['Fruits']     = fruits;
+                    better_has['Flowers']    = flowers;
+                    better_has['Vegetables'] = vegetables;
+                    better_has['Nuts']       = nuts;
+
+                    switch(property_result.PropertyType)
+                    {
+                        case 'FARM':
+                            break;
+                        case 'GARDEN':
+                            better_has['Animals'] = null;
+                            better_has['Fruits'] = null;
+                            better_has['Nuts'] = null;
+                            break;
+                        case 'ORCHARD':
+                            better_has['Animals'] = null;
+                            better_has['Vegetables'] = null;
+                            better_has['Flowers'] = null;
+                            break;
+                    }
+
+                    // Render the page
+                    res.render('owner/property', {
+                        destroy : req.query.destroy,
+                        result  : property_result,
+                        has     : better_has,
+                        errors  : errors.mapped()
+                    });
+                });
+            });
+        });
+    }
+    else
+    {
+        // Fetch the id
+        req.body.id = req.params.id;
+
+        // Normallize IsPublic and IsCommercial
+        if(req.body.ispublic)
+        {
+            req.body.ispublic = 1;
+        }
+        else
+        {
+            req.body.ispublic = 0;
+        }
+
+        if(req.body.iscommercial)
+        {
+            req.body.iscommercial = 1;
+        }
+        else
+        {
+            req.body.iscommercial = 0;
+        }
+
+        req.body.approvedby = req.session.user_name;
+
+        var fields = req.body
+
+        // Update the property
+        connection.query({
+            sql     : "UPDATE `Property` SET `Name` = ?, `Size` = ?, `IsCommercial` = ?, `IsPublic` = ?, `Street` = ?, `City` = ?, `Zip` = ?, `ApprovedBy` = null WHERE ID = ?;",
+            timeout : 30000, // 30s
+            values  : [fields.name, fields.size, fields.iscommercial, fields.ispublic, fields.street, fields.city, fields.zip, fields.id]
+        }, function (error, results, fields) {
+            res.redirect('/owner/property/' + req.params.id);
+        });
+    }
+});
+
 module.exports = router;
